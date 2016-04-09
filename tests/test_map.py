@@ -10,13 +10,13 @@ import hashlib
 class TestMap(TestCase):
 
     def setUp(self):
-        self.hash = 'ab60fddf9156cb7bdd4becf6020d8e42fcaee8cd1770f6ed21a8733234608135'
+        self.hash = '59b9e9c46b51b6b2f093ca6161d931e23e10e80e9dbacdb0316af08bd8b5fe36'
         self.root_path = str(os.path.dirname(os.path.abspath(__file__))).replace('tests', '')
-        self.font_path = self.root_path + '/fonts'
-        self.font_path_fn = self.root_path + '/fonts/DejaVuSansMono.ttf'
-        self.icon_path = self.root_path + '/icons'
-        self.cfg_path = self.root_path + '/mapcfgs'
-        self.img_path = self.root_path + '/mapimgs'
+        self.font_path = self.root_path + 'fonts'
+        self.font_path_fn = self.root_path + 'fonts/DejaVuSansMono.ttf'
+        self.icon_path = self.root_path + 'icons'
+        self.cfg_path = self.root_path + 'mapcfgs'
+        self.img_path = self.root_path + 'mapimgs'
 
         a = Node(self.font_path_fn, self.icon_path, x=300, y=30, label='host-A', icon='Router96.png')
         b = Node(self.font_path_fn, self.icon_path, x=750, y=30, label='host-B', icon='Router96.png')
