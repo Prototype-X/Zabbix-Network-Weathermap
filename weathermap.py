@@ -107,7 +107,10 @@ if __name__ == '__main__':
 # TODO upload map image to zabbix +
 # TODO when generate map from zabbix data, check map file exist, if map exist get from file hostnames and items and
 # TODO write to new map configuration file +
-# TODO add new option fontsize in section [map]
+# TODO add new option fontsize in section [map] +
+# TODO add new option fontsize in section [node-]
+# TODO add new option fontsize in section [link-]
+# TODO add new option fontsize in section [table]
 # TODO add new option bgcolor in section [map]
 # TODO add table date and time
 # TODO class cli with argsparse

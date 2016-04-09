@@ -80,7 +80,7 @@ class Label(object):
 
 class Node(object):
     """ Node (device) on a map"""
-    def __init__(self, fontfile, icon_path,  x=0, y=0, label=None, icon=None):
+    def __init__(self, fontfile, icon_path,  x=0, y=0, label=None, icon=None, fontsize=10):
         self.x = x
         self.y = y
         self.icon = icon
@@ -88,7 +88,7 @@ class Node(object):
         self.icon_point = None
         self.label_obj = None
         if label:
-            self.label_obj = Label(label=label, point=[x, y], fontfile=fontfile)
+            self.label_obj = Label(label=label, point=[x, y], fontfile=fontfile, fontsize=fontsize)
         if self.icon:
             self.icon_point = self.icon_xy()
 
@@ -106,10 +106,11 @@ class Node(object):
 class Link(object):
     """ A line between two Nodes. The line contains two arrows: one for an input
     value and one for an output value"""
-    def __init__(self, fontfile, node_a, node_b, bandwidth=1000, width=5, palette=None):
+    def __init__(self, fontfile, node_a, node_b, bandwidth=1000, width=5, palette=None, fontsize=10):
         self.node_a = node_a
         self.node_b = node_b
         self.fontfile = fontfile
+        self.fontsize = fontsize
         self.bandwidth = bandwidth
         self.width = float(width)
         if not palette:
@@ -148,8 +149,8 @@ class Link(object):
         in_name, out_name = self._name(in_mps, out_mps)
         in_point = self._get_input_label_point()
         out_point = self._get_output_label_point()
-        self.in_label = Label(self.fontfile, label=in_name, point=in_point)
-        self.out_label = Label(self.fontfile, label=out_name, point=out_point)
+        self.in_label = Label(self.fontfile, label=in_name, point=in_point, fontsize=self.fontsize)
+        self.out_label = Label(self.fontfile, label=out_name, point=out_point, fontsize=self.fontsize)
 
     @staticmethod
     def _name(in_mps, out_mps):

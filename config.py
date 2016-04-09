@@ -26,7 +26,7 @@ class ConfigTemplate(object):
     """ This is config template dict. DO NOT MODIFY THIS OBJECT."""
     def __init__(self):
         self.base = {'zabbix': {'url': str(), 'login': str(), 'password': str()},
-                     'map': {'name': str(), 'width': int(), 'height': int()},
+                     'map': {'name': str(), 'fontsize': '10', 'width': int(), 'height': int()},
                      'table': {'show': False, 'x': int(), 'y': int()},
                      'link': {'width': 10, 'bandwidth': 100},
                      'palette': {'0': '#908C8C', '1': '#FFFFFF', '2': '#8000FF',
@@ -46,7 +46,6 @@ class ConfigLoader(object):
         self.config.read(path_cfg)
         self.obj_nodes = {}
         self.obj_links = {}
-        # self.path = str(os.path.dirname(os.path.abspath(__file__)))
         self.template = ConfigTemplate()
         self.cfg_dict = {}
         self.zbx = None
@@ -105,13 +104,14 @@ class ConfigLoader(object):
 
     def create_map(self, font_path_fn, icon_path):
         palette = [self.cfg_dict['palette'][key] for key in sorted(self.cfg_dict['palette'])]
+        fontsize = int(self.cfg_dict['map']['fontsize'])
 
         for node in self.obj_nodes.keys():
             x = int(self.cfg_dict[node]['x'])
             y = int(self.cfg_dict[node]['y'])
             label = self.cfg_dict[node]['label']
             icon = self.cfg_dict[node]['icon']
-            self.obj_nodes[node] = (Node(font_path_fn, icon_path, x=x, y=y, label=label, icon=icon))
+            self.obj_nodes[node] = (Node(font_path_fn, icon_path, x=x, y=y, label=label, icon=icon, fontsize=fontsize))
 
         for link in self.obj_links.keys():
             node1 = self.obj_nodes[self.cfg_dict[link]['node1']]
@@ -121,7 +121,8 @@ class ConfigLoader(object):
             hostname = self.cfg_dict[link]['hostname']
             item_in = self.cfg_dict[link]['itemin']
             item_out = self.cfg_dict[link]['itemout']
-            self.obj_links[link] = (Link(font_path_fn, node1, node2, bandwidth=bandwidth, width=width, palette=palette))
+            self.obj_links[link] = (Link(font_path_fn, node1, node2, bandwidth=bandwidth, width=width,
+                                         palette=palette, fontsize=fontsize))
             data_in, data_out = self.zbx.get_item_data2(hostname, item_in, item_out)
             self.obj_links[link].data(in_bps=data_in, out_bps=data_out)
 
@@ -160,6 +161,7 @@ class ConfigCreate(object):
         self.map_config['zabbix']['password'] = self.zbx.password
         self.map_config.add_section('map')
         self.map_config['map']['name'] = self.map_data['name']
+        self.map_config['map']['fontsize'] = self.template.base['map']['fontsize']
         self.map_config['map']['width'] = self.map_data['width']
         self.map_config['map']['height'] = self.map_data['height']
         self.map_config.add_section('table')
@@ -199,7 +201,7 @@ class ConfigCreate(object):
             self.map_config.write(cfg_file)
 
     def check_map(self, old_cfg_path):
-        old_cfg_path_fn = old_cfg_path + self.map_data['name'] + '.cfg'
+        old_cfg_path_fn = old_cfg_path + '/' +self.map_data['name'] + '.cfg'
         exist = os.path.exists(old_cfg_path_fn)
         if exist:
             self._compare(old_cfg_path_fn)
