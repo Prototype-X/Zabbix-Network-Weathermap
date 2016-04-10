@@ -23,16 +23,16 @@ class ZabbixAgent(object):
         self.zbx_api = ZabbixAPI(url=url, use_authenticate=False, user=login, password=password)
         log.debug('API ver. %s', self.api_ver())
 
-    def get_item_data(self, hostname, itemname):
+    def get_item_data(self, hostname, item):
         hostid = self.zbx_api.host.get(filter={'name': hostname}, output='shorten')[0]['hostid']
         log.debug('hostID %s', hostid)
         if not hostid:
             raise ZbxException("hostname: {} not found".format(hostname))
 
-        item_data = self.zbx_api.item.get(filter={'hostid': hostid, 'name': itemname}, output=['lastvalue'])
+        item_data = self.zbx_api.item.get(filter={'hostid': hostid, 'key_': item}, output=['lastvalue'])
         log.debug('itemID %s', hostid)
         if not item_data:
-            raise ZbxException('item: {} not found'.format(itemname))
+            raise ZbxException('item: {} not found'.format(item))
 
         if len(item_data) > 1:
             raise ZbxException('return items expected one item')
@@ -44,12 +44,12 @@ class ZabbixAgent(object):
         if not hostid:
             raise ZbxException("hostname: {} not found".format(hostname))
 
-        item_in_data = self.zbx_api.item.get(filter={'hostid': hostid, 'name': item_in}, output=['lastvalue'])
+        item_in_data = self.zbx_api.item.get(filter={'hostid': hostid, 'key_': item_in}, output=['lastvalue'])
         log.debug('itemID %s', hostid)
         if not item_in_data:
             raise ZbxException('item: {} not found'.format(item_in))
 
-        item_out_data = self.zbx_api.item.get(filter={'hostid': hostid, 'name': item_out}, output=['lastvalue'])
+        item_out_data = self.zbx_api.item.get(filter={'hostid': hostid, 'key_': item_out}, output=['lastvalue'])
         log.debug('itemID %s', hostid)
         if not item_in_data:
             raise ZbxException('item: {} not found'.format(item_out))
