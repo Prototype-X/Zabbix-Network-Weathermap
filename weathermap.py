@@ -102,11 +102,8 @@ if __name__ == '__main__':
 
 
 # TODO config.py: configparser.ConfigParser().has_section convert to str.lower()
-# TODO if hostname or item value eq '' then remove from link list, it is not error +
 # TODO tests for all classes
-# TODO upload map image to zabbix +
-# TODO when generate map from zabbix data, check map file exist, if map exist get from file hostnames and items and
-# TODO write to new map configuration file +
+# TODO logging for all classes, detail logging
 # TODO add new option fontsize in section [map] +
 # TODO add new option fontsize in section [node-]
 # TODO add new option fontsize in section [link-]
@@ -115,4 +112,4 @@ if __name__ == '__main__':
 # TODO add table date and time
 # TODO class cli with argsparse
 # TODO python or bash start script, run weathermap from zabbix agent or item with external check
-# TODO detail logging
+# TODO arg -a --all
