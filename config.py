@@ -201,7 +201,7 @@ class ConfigCreate(object):
             self.map_config.write(cfg_file)
 
     def check_map(self, old_cfg_path):
-        old_cfg_path_fn = old_cfg_path + '/' +self.map_data['name'] + '.cfg'
+        old_cfg_path_fn = old_cfg_path + '/' + self.map_data['name'] + '.cfg'
         exist = os.path.exists(old_cfg_path_fn)
         if exist:
             self._compare(old_cfg_path_fn)
