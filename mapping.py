@@ -247,7 +247,7 @@ class Link(object):
         return points
 
 
-class Map:
+class Map(object):
     def __init__(self, links, nodes, table=None, len_x=800, len_y=800, bgcolor=None, ):
         # Link instance
         self.bgcolor = bgcolor
