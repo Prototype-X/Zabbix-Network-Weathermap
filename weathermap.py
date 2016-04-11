@@ -113,3 +113,5 @@ if __name__ == '__main__':
 # TODO class cli with argsparse
 # TODO python or bash start script, run weathermap from zabbix agent or item with external check
 # TODO arg -a --all
+# TODO bug на одной карте не может быть два хоста с одинаковыми именами, решение брать elemid и добать в секцию Node
+    # опцию name и в разде Link- опции name1 и name2 для читабельности.
