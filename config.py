@@ -26,7 +26,7 @@ class ConfigTemplate(object):
     """ This is config template dict. DO NOT MODIFY THIS OBJECT."""
     def __init__(self):
         self.base = {'zabbix': {'url': str(), 'login': str(), 'password': str()},
-                     'map': {'name': str(), 'fontsize': '10', 'width': int(), 'height': int()},
+                     'map': {'name': str(), 'bgcolor': str(), 'fontsize': '10', 'width': int(), 'height': int()},
                      'table': {'show': False, 'x': int(), 'y': int()},
                      'link': {'width': 10, 'bandwidth': 100},
                      'palette': {'0': '#908C8C', '1': '#FFFFFF', '2': '#8000FF',
@@ -35,15 +35,18 @@ class ConfigTemplate(object):
                                  '7': '#FF6600', '8': '#FF0000'}
                      }
 
-        self.node = {'label': str(), 'icon': str(), 'x': int(), 'y': int()}
-        self.link = {'node1': str(), 'node2': str(), 'hostname': str(), 'itemin': str(), 'itemout': str(),
-                     'width': int(), 'bandwidth': int()}
+        self.node = {'name': str(), 'label': str(), 'icon': str(), 'x': int(), 'y': int()}
+        self.link = {'node1': str(), 'node2': str(), 'name1': str(), 'name2': str(), 'hostname': str(),
+                     'itemin': str(), 'itemout': str(), 'width': int(), 'bandwidth': int()}
 
 
 class ConfigLoader(object):
     def __init__(self, path_cfg):
         self.config = configparser.ConfigParser()
-        self.config.read(path_cfg)
+        if self.config.read(path_cfg):
+            self.config.read(path_cfg)
+        else:
+            raise ConfigException('file not found: {0}'.format(path_cfg))
         self.obj_nodes = {}
         self.obj_links = {}
         self.template = ConfigTemplate()
@@ -134,7 +137,12 @@ class ConfigLoader(object):
 
         map_width = int(self.cfg_dict['map']['width'])
         map_height = int(self.cfg_dict['map']['height'])
-        map_obj = Map(self.obj_links.values(), self.obj_nodes.values(), table=table, len_x=map_width, len_y=map_height)
+        if self.cfg_dict['map']['bgcolor']:
+            map_bgcolor = self.cfg_dict['map']['bgcolor']
+        else:
+            map_bgcolor = None
+        map_obj = Map(self.obj_links.values(), self.obj_nodes.values(), table=table, len_x=map_width,
+                      len_y=map_height, bgcolor=map_bgcolor)
         return map_obj
 
     def upload(self, img_path_fn):
@@ -147,7 +155,7 @@ class ConfigCreate(object):
         self.map_data = map_data
         self.template = ConfigTemplate()
         self.map_config = configparser.ConfigParser()
-        self.path = str(os.path.dirname(os.path.abspath(__file__)))
+        # self.path = str(os.path.dirname(os.path.abspath(__file__)))
         self.dict_call = [self.zbx.get_hostname, self.zbx.get_mapname,
                           self.zbx.get_triggername, self.zbx.get_hostgroupname,
                           self.zbx.get_imagename]
@@ -174,22 +182,26 @@ class ConfigCreate(object):
         self.map_config['link'] = self.template.base['link']
 
         for node in self.map_data['selements']:
+            nodeid = node['selementid']
             nodename = self.dict_call[int(node['elementtype'])](node['elementid'])
             elemid_dict[node['selementid']] = nodename
 
-            self.map_config.add_section('node-' + nodename)
-            self.map_config['node-' + nodename]['label'] = ''
-            self.map_config['node-' + nodename]['icon'] = ''
+            self.map_config.add_section('node-' + nodeid)
+            self.map_config['node-' + nodeid]['name'] = self.dict_call[int(node['elementtype'])](node['elementid'])
+            self.map_config['node-' + nodeid]['label'] = ''
+            self.map_config['node-' + nodeid]['icon'] = ''
             image_b64code = self.zbx.image_get(node['iconid_off'])
-            with Image.open(BytesIO(base64.b64decode(image_b64code))) as im:
-                width, height = im.size
-            self.map_config['node-' + nodename]['x'] = str(int(node['x']) + int(width//2))
-            self.map_config['node-' + nodename]['y'] = str(int(node['y']) + int(height//2))
+            im = Image.open(BytesIO(base64.b64decode(image_b64code)))
+            width, height = im.size
+            self.map_config['node-' + nodeid]['x'] = str(int(node['x']) + int(width//2))
+            self.map_config['node-' + nodeid]['y'] = str(int(node['y']) + int(height//2))
 
         for link in self.map_data['links']:
             self.map_config.add_section('link-' + link['linkid'])
-            self.map_config['link-' + link['linkid']]['node1'] = 'node-' + elemid_dict[link['selementid1']]
-            self.map_config['link-' + link['linkid']]['node2'] = 'node-' + elemid_dict[link['selementid2']]
+            self.map_config['link-' + link['linkid']]['node1'] = 'node-' + link['selementid1']
+            self.map_config['link-' + link['linkid']]['node2'] = 'node-' + link['selementid2']
+            self.map_config['link-' + link['linkid']]['name1'] = elemid_dict[link['selementid1']]
+            self.map_config['link-' + link['linkid']]['name2'] = elemid_dict[link['selementid2']]
             self.map_config['link-' + link['linkid']]['hostname'] = ''
             self.map_config['link-' + link['linkid']]['itemin'] = ''
             self.map_config['link-' + link['linkid']]['itemout'] = ''

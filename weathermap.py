@@ -108,10 +108,8 @@ if __name__ == '__main__':
 # TODO add new option fontsize in section [node-]
 # TODO add new option fontsize in section [link-]
 # TODO add new option fontsize in section [table]
-# TODO add new option bgcolor in section [map]
+# TODO add new option bgcolor in section [map] +
 # TODO add table date and time
 # TODO class cli with argsparse
 # TODO python or bash start script, run weathermap from zabbix agent or item with external check
 # TODO arg -a --all
-# TODO bug на одной карте не может быть два хоста с одинаковыми именами, решение брать elemid и добать в секцию Node
-    # опцию name и в разде Link- опции name1 и name2 для читабельности.
