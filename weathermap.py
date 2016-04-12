@@ -79,7 +79,7 @@ class WeathermapCLI(object):
             cfg.load()
             map_obj = cfg.create_map(self.font_path_fn, self.icon_path)
             map_obj.do()
-            map_obj.show()
+            # map_obj.show()
             map_obj.save_img(self.img_path + '/' + map_fn[:-4] + '.png')
 
             if self.args.upload:
@@ -114,6 +114,6 @@ if __name__ == '__main__':
 # TODO add new option fontsize in section [link-]
 # TODO add new option fontsize in section [table]
 # TODO add new option bgcolor in section [map] +
-# TODO add table date and time
+# TODO add table date and time +
 # TODO python or bash start script, run weathermap from zabbix agent or item with external check
 # TODO arg -a --all
