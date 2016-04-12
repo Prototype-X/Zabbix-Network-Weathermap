@@ -169,6 +169,7 @@ class ConfigCreate(object):
         self.map_config['zabbix']['password'] = self.zbx.password
         self.map_config.add_section('map')
         self.map_config['map']['name'] = self.map_data['name']
+        self.map_config['map']['bgcolor'] = ''
         self.map_config['map']['fontsize'] = self.template.base['map']['fontsize']
         self.map_config['map']['width'] = self.map_data['width']
         self.map_config['map']['height'] = self.map_data['height']
