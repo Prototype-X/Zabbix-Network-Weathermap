@@ -59,8 +59,13 @@ class Label(object):
         self.name = str(label)
         self.points = [0, 0, 0, 0]
         self.point_name = [0, 0]
-        self.font_width = {8: 6, 10: 7, 12: 8, 14: 9, 16: 10, 18: 11}
-        # self.font_height = {8: 10, 10: 12, 12: 14, 14: 16, 16: 18, 18: 20}
+        self.font_width = {8: 6, 10: 7, 12: 8, 14: 9, 16: 11, 18: 12, 20: 13}
+
+        try:
+            self.font_width[self.fontsize]
+        except KeyError:
+            self.fontsize = 10
+
         if point:
             self.label_xy(point)
 
