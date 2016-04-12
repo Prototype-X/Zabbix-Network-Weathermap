@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 # __author__ = 'maximus'
 from PIL import Image, ImageDraw, ImageFont
+from datetime import datetime
 import math
 import os
 import logging
@@ -10,7 +11,7 @@ log = logging.getLogger(__name__)
 
 
 class Table(object):
-    def __init__(self, fontfile, x=0, y=0, palette=None):
+    def __init__(self, fontfile, x=0, y=0, palette=None, fontsize=12):
         self.x = x
         self.y = y
         self.width_palet = 30
@@ -25,14 +26,18 @@ class Table(object):
         self.text = ['0-0%', '0-1%', '1-10%', '10-25%', '25-40%', '40-55%', '55-70%', '70-85%', '85-100%']
         self.fontfile = fontfile
         self.fontcolor = 'black'
-        self.fontsize = 12
+        self.fontsize = fontsize
         self.font = ImageFont.truetype(self.fontfile, size=self.fontsize)
         if not palette:
             self.palette = ('#908C8C', '#FFFFFF', '#8000FF', '#0000FF', '#00EAEA',
                             '#00FF00', '#FFFF00', '#FF6600', '#FF0000')
 
+        self.dt_obj = datetime.now()
+        self.date_now = datetime.strftime(self.dt_obj, "%d.%m.%Y")
+        self.time_now = datetime.strftime(self.dt_obj, "%H:%M:%S")
+
     def table_xy(self):
-        for i in range(0, 9):
+        for i in range(0, 11):
             x1 = self.x + self.indent_x
             y1 = self.yt + self.indent_y + self.height_palet * i
             x2 = self.x + self.indent_x + self.width_palet
@@ -42,9 +47,15 @@ class Table(object):
     def draw_table(self, draw):
         draw.rectangle((self.x, self.y, self.rect_xy[8][2] + 60, self.rect_xy[8][3] + 5), outline='black', fill='white')
         draw.text((self.x + 5, self.y + 5), self.text_label, fill='black', font=self.font)
+        draw.rectangle((self.x, self.rect_xy[9][1] + 5, self.rect_xy[10][2] + 60,
+                        self.rect_xy[10][3] + 5), outline='black', fill='white')
+
         for i in range(0, 9):
             draw.rectangle(self.rect_xy[i], fill=self.palette[i], outline=self.palette[i])
             draw.text((self.rect_xy[i][2] + 2, self.rect_xy[i][1] + 2), self.text[i], fill='black', font=self.font)
+
+        draw.text((self.rect_xy[9][0] + 14, self.rect_xy[9][1] + 8), self.time_now, fill='black', font=self.font)
+        draw.text((self.rect_xy[10][0] + 8, self.rect_xy[10][1] + 4), self.date_now, fill='black', font=self.font)
 
 
 class Label(object):
