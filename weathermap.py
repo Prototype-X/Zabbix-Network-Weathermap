@@ -25,14 +25,14 @@ class WeathermapCLI(object):
         self.parser.add_argument('-h', '--help', action='help', help='show help')
         self.parser.add_argument('-d', '--debug', action='store_true', help='Enable debug mode')
 
-        self.parser.add_argument('-m', '--map', action='store', type=str, help='Config file name')
+        self.parser.add_argument('-m', '--map', nargs='+', action='store', type=str, help='Config file names')
         self.parser.add_argument('-i', '--img', action='store', type=str, help='Image path')
         self.parser.add_argument('-u', '--upload', action='store_true', help='Image upload to zabbix')
 
         self.parser.add_argument('-c', '--cfg', action='store', type=str, help='Config path')
-        self.parser.add_argument('-a', '--all', action='store_true', help='all')
+        # self.parser.add_argument('-a', '--all', action='store_true', help='all')
 
-        self.parser.add_argument('-s', '--scan', action='store', type=str, help='Map name in Zabbix')
+        self.parser.add_argument('-s', '--scan', nargs='+', action='store', type=str, help='Map names in Zabbix')
         self.parser.add_argument('-z', '--zabbix', action='store', type=str, help='Zabbix server url')
         self.parser.add_argument('-l', '--login', action='store', type=str, help='Login')
         self.parser.add_argument('-p', '--pwd', action='store', help='Password')
@@ -59,28 +59,33 @@ class WeathermapCLI(object):
     def _map_scan(self):
         if self.args.cfg:
             self.cfg_path = self.args.cfg
-        zbx = ZabbixAgent(self.args.zabbix, self.args.login, self.args.pwd)
-        map_data = zbx.scan_map(self.args.scan)
-        scan_map = ConfigCreate(map_data, zbx)
-        scan_map.create()
-        scan_map.check_map(self.cfg_path)
-        scan_map.save(self.cfg_path)
+        for map_n in self.args.scan:
+            zbx = ZabbixAgent(self.args.zabbix, self.args.login, self.args.pwd)
+            map_data = zbx.scan_map(map_n)
+            scan_map = ConfigCreate(map_data, zbx)
+            scan_map.create()
+            scan_map.check_map(self.cfg_path)
+            scan_map.save(self.cfg_path)
+
+            del zbx, scan_map, map_data
 
     def _map_img(self):
         if self.args.cfg:
             self.cfg_path = self.args.cfg
         if self.args.img:
             self.img_path = self.args.img
+        for map_fn in self.args.map:
+            cfg = ConfigLoader(self.cfg_path + '/' + map_fn)
+            cfg.load()
+            map_obj = cfg.create_map(self.font_path_fn, self.icon_path)
+            map_obj.do()
+            map_obj.show()
+            map_obj.save_img(self.img_path + '/' + map_fn[:-4] + '.png')
 
-        cfg = ConfigLoader(self.cfg_path + '/' + self.args.map)
-        cfg.load()
-        map_obj = cfg.create_map(self.font_path_fn, self.icon_path)
-        map_obj.do()
-        map_obj.show()
-        map_obj.save_img(self.img_path + '/' + self.args.map[:-4] + '.png')
+            if self.args.upload:
+                cfg.upload(self.img_path + '/' + map_fn[:-4] + '.png')
 
-        if self.args.upload:
-            cfg.upload(self.img_path + '/' + self.args.map[:-4] + '.png')
+            del cfg, map_obj
 
     def _cfg_logging(self):
         """
