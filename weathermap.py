@@ -117,3 +117,4 @@ if __name__ == '__main__':
 # TODO add table date and time +
 # TODO python or bash start script, run weathermap from zabbix agent or item with external check
 # TODO arg -a --all
+# TODO option copy in section link-
