@@ -11,7 +11,8 @@ def main():
     cli = ['/opt/Zabbix-Network-Weathermap/weathermap.py']
     cli.extend(sys.argv[1:])
     subprocess.call(cli)
-    print(round(time.time() - start_time, 3), file=sys.stdout)
+    latency = time.time() - start_time
+    print(round(latency, 3), file=sys.stdout)
 
 if __name__ == '__main__':
     main()
