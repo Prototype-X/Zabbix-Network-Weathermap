@@ -206,10 +206,10 @@ class ConfigCreate(object):
 
         for link in self.map_data['links']:
             self.map_config.add_section('link-' + link['linkid'])
-            self.map_config['link-' + link['linkid']]['node1'] = 'node-' + link['selementid1']
-            self.map_config['link-' + link['linkid']]['node2'] = 'node-' + link['selementid2']
-            self.map_config['link-' + link['linkid']]['name1'] = elemid_dict[link['selementid1']]
-            self.map_config['link-' + link['linkid']]['name2'] = elemid_dict[link['selementid2']]
+            self.map_config['link-' + link['linkid']]['node1'] = 'node-' + link['selementid2']
+            self.map_config['link-' + link['linkid']]['node2'] = 'node-' + link['selementid1']
+            self.map_config['link-' + link['linkid']]['name1'] = elemid_dict[link['selementid2']]
+            self.map_config['link-' + link['linkid']]['name2'] = elemid_dict[link['selementid1']]
             self.map_config['link-' + link['linkid']]['hostname'] = ''
             self.map_config['link-' + link['linkid']]['itemin'] = ''
             self.map_config['link-' + link['linkid']]['itemout'] = ''
