@@ -70,7 +70,7 @@ class Label(object):
         self.name = str(label)
         self.points = [0, 0, 0, 0]
         self.point_name = [0, 0]
-        self.font_width = {8: 6, 10: 7, 12: 8, 14: 9, 16: 11, 18: 12, 20: 13}
+        self.font_width = {8: 6, 10: 7.4, 12: 8, 14: 9, 16: 11, 18: 12, 20: 13}
 
         try:
             self.font_width[self.fontsize]
