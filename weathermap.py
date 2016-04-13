@@ -33,6 +33,7 @@ class WeathermapCLI(object):
         # self.parser.add_argument('-a', '--all', action='store_true', help='all')
 
         self.parser.add_argument('-s', '--scan', nargs='+', action='store', type=str, help='Map names in Zabbix')
+        self.parser.add_argument('-f', '--file', action='store_true', help='Zabbix authenticate from map config')
         self.parser.add_argument('-z', '--zabbix', action='store', type=str, help='Zabbix server url')
         self.parser.add_argument('-l', '--login', action='store', type=str, help='Login')
         self.parser.add_argument('-p', '--pwd', action='store', help='Password')
@@ -52,6 +53,8 @@ class WeathermapCLI(object):
             self._map_img()
         elif self.args.scan and self.args.zabbix and self.args.login and self.args.pwd:
             self._map_scan()
+        elif self.args.scan and self.args.file:
+            self._map_scan_cfg()
         else:
             self.parser.print_help()
             sys.exit()
@@ -68,6 +71,20 @@ class WeathermapCLI(object):
             scan_map.save(self.cfg_path)
 
             del zbx, scan_map, map_data
+
+    def _map_scan_cfg(self):
+        if self.args.cfg:
+            self.cfg_path = self.args.cfg
+        for map_n in self.args.scan:
+            cfg = ConfigLoader(self.cfg_path + '/' + map_n + '.cfg')
+            cfg.load()
+            map_data = cfg.zbx.scan_map(map_n)
+            scan_map = ConfigCreate(map_data, cfg.zbx)
+            scan_map.create()
+            scan_map.check_map(self.cfg_path)
+            scan_map.save(self.cfg_path)
+
+            del cfg, scan_map, map_data
 
     def _map_img(self):
         if self.args.cfg:
