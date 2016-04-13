@@ -9,6 +9,7 @@ from zabbix import ZabbixAgent
 from mapping import Node, Link, Map, Table
 from PIL import Image
 import base64
+import random
 from io import BytesIO
 
 log = logging.getLogger(__name__)
@@ -36,7 +37,7 @@ class ConfigTemplate(object):
                      }
 
         self.node = {'name': str(), 'label': str(), 'icon': str(), 'x': int(), 'y': int()}
-        self.link = {'node1': str(), 'node2': str(), 'name1': str(), 'name2': str(), 'hostname': str(),
+        self.link = {'node1': str(), 'node2': str(), 'name1': str(), 'name2': str(), 'copy': '0', 'hostname': str(),
                      'itemin': str(), 'itemout': str(), 'width': int(), 'bandwidth': int()}
 
 
@@ -89,6 +90,8 @@ class ConfigLoader(object):
                             link['width'] = self.config['link']['width']
                         elif option == 'bandwidth':
                             link['bandwidth'] = self.config['link']['bandwidth']
+                        elif option == 'copy':
+                            pass
                         elif not self.config.has_option(name, option):
                             raise ConfigException('The option: {0} is missing in section: [{1}]'
                                                   .format(option, name))
@@ -244,3 +247,36 @@ class ConfigCreate(object):
                         self.map_config[section]['width'] = config_old[section]['width']
                     if config_old.has_option(section, 'bandwidth'):
                         self.map_config[section]['bandwidth'] = config_old[section]['bandwidth']
+
+        for section in config_old.sections():
+            if 'link-' in section:
+                try:
+                    config_old[section]['copy']
+                except KeyError:
+                    continue
+                if config_old[section]['copy']:
+                    new_section = 'link-' + self.random_label()
+                    node1_sect = config_old[section]['node1']
+                    node2_sect = config_old[section]['node2']
+                    node1_new_sect = 'node-' + self.random_label()
+                    node2_new_sect = 'node-' + self.random_label()
+
+                    self.map_config.add_section(new_section)
+                    for option in config_old.options(section):
+                        if 'node1' in option:
+                            self.map_config[new_section][option] = node1_new_sect
+                        elif 'node2' in option:
+                            self.map_config[new_section][option] = node2_new_sect
+                        else:
+                            self.map_config[new_section][option] = config_old[section][option]
+
+                    self.map_config.add_section(node1_new_sect)
+                    self.map_config.add_section(node2_new_sect)
+                    for option in config_old.options(node1_sect):
+                        self.map_config[node1_new_sect][option] = config_old[node1_sect][option]
+                    for option in config_old.options(node2_sect):
+                        self.map_config[node2_new_sect][option] = config_old[node2_sect][option]
+
+    @staticmethod
+    def random_label():
+        return ''.join(random.SystemRandom().choice('abcdefgijklmnoprstuvwxyz1234567890') for _ in range(8))
