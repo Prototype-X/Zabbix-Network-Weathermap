@@ -164,6 +164,10 @@ class ConfigCreate(object):
                           self.zbx.get_imagename]
         self.cfg_loader_obj = None
 
+    @staticmethod
+    def random_label():
+        return ''.join(random.SystemRandom().choice('abcdefgijklmnoprstuvwxyz1234567890') for _ in range(8))
+
     def create(self):
         elemid_dict = {}
         self.map_config.add_section('zabbix')
@@ -276,7 +280,3 @@ class ConfigCreate(object):
                         self.map_config[node1_new_sect][option] = config_old[node1_sect][option]
                     for option in config_old.options(node2_sect):
                         self.map_config[node2_new_sect][option] = config_old[node2_sect][option]
-
-    @staticmethod
-    def random_label():
-        return ''.join(random.SystemRandom().choice('abcdefgijklmnoprstuvwxyz1234567890') for _ in range(8))
