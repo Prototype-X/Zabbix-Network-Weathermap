@@ -21,7 +21,6 @@ Network weathermap for Zabbix like [Network Weathermap](http://network-weatherma
 
 * put directory Zabbix-Network-Weathermap to /opt/
 
-
     chown -R zabbix:zabbix /opt/Zabbix-Network-Weathermap/*
     chmod a+x /opt/Zabbix-Network-Weathermap/starter.py
     chmod a+x /opt/Zabbix-Network-Weathermap/weathermap.py
