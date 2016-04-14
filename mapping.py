@@ -30,7 +30,7 @@ class Table(object):
         self.font = ImageFont.truetype(self.fontfile, size=self.fontsize)
         if not palette:
             self.palette = ('#908C8C', '#FFFFFF', '#8000FF', '#0000FF', '#00EAEA',
-                            '#00FF00', '#FFFF00', '#FF6600', '#FF0000')
+                            '#00FF00', '#FFFF00', '#FF9933', '#FF0000')
 
         self.dt_obj = datetime.now()
         self.date_now = datetime.strftime(self.dt_obj, "%d.%m.%Y")
@@ -131,7 +131,7 @@ class Link(object):
         self.width = float(width)
         if not palette:
             self.palette = ('#908C8C', '#FFFFFF', '#8000FF', '#0000FF', '#00EAEA',
-                            '#00FF00', '#FFFF00', '#FF6600', '#FF0000')
+                            '#00FF00', '#FFFF00', '#FF9933', '#FF0000')
         else:
             self.palette = palette
 
