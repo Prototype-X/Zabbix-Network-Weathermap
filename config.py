@@ -33,7 +33,7 @@ class ConfigTemplate(object):
                      'palette': {'0': '#908C8C', '1': '#FFFFFF', '2': '#8000FF',
                                  '3': '#0000FF', '4': '#00EAEA',
                                  '5': '#00FF00', '6': '#FFFF00',
-                                 '7': '#FF6600', '8': '#FF0000'}
+                                 '7': '#FF9933', '8': '#FF0000'}
                      }
 
         self.node = {'name': str(), 'label': str(), 'icon': str(), 'x': int(), 'y': int()}
