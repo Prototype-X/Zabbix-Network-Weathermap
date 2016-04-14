@@ -10,7 +10,7 @@ import hashlib
 class TestMap(TestCase):
 
     def setUp(self):
-        self.hash = '59b9e9c46b51b6b2f093ca6161d931e23e10e80e9dbacdb0316af08bd8b5fe36'
+        self.hash = 'fd6069568a5d453a8572fbfafb517f14115bc093deee67554c468b61ac734d61'
         self.root_path = str(os.path.dirname(os.path.abspath(__file__))).replace('tests', '')
         self.font_path = self.root_path + 'fonts'
         self.font_path_fn = self.root_path + 'fonts/DejaVuSansMono.ttf'
@@ -35,7 +35,7 @@ class TestMap(TestCase):
         link_e = Link(self.font_path_fn, a, b, bandwidth=100, width=15)
         link_e.data(in_bps=73456852, out_bps=987654)
 
-        table = Table(self.font_path_fn, x=700, y=350)
+        table = Table(self.font_path_fn, x=700, y=350, dt=False)
         self.new_map = Map([link_a, link_b, link_c, link_d, link_e], [a, b, c, d, e], table=table, len_x=800, len_y=800)
 
     def test_map(self):
