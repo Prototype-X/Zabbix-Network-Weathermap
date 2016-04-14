@@ -200,11 +200,11 @@
             <macros>
                 <macro>
                     <macro>{$SCANFILE}</macro>
-                    <value>-m mapname1 mapnameN -f</value>
+                    <value>-s mapname1 mapnameN -f</value>
                 </macro>
                 <macro>
                     <macro>{$SCANMAP}</macro>
-                    <value>-m mapname1 mapnameN -z http://zabbix.example.ru -l admin -p admin</value>
+                    <value>-s mapname1 mapnameN -z http://zabbix.example.ru -l admin -p admin</value>
                 </macro>
                 <macro>
                     <macro>{$UPDATE}</macro>
