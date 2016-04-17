@@ -31,3 +31,21 @@ Network weathermap for Zabbix like [Network Weathermap](http://network-weatherma
 ![map screenshot](https://cloud.githubusercontent.com/assets/12714643/14538840/63cf2870-0286-11e6-98f2-d67f548a0d54.png)
 
 ###Man ###
+    usage: weathermap.py [-v] [-h] [-d] [-m MAP [MAP ...]] [-i IMG] [-u] [-c CFG] [-s SCAN [SCAN ...]] [-f]
+                         [-z ZABBIX] [-l LOGIN] [-p PWD]
+
+    Network weathermap for Zabbix
+
+    optional arguments:
+    -v, --version                             show version
+    -h, --help                                show help
+    -d, --debug                               Enable debug mode
+    -m MAP [MAP ..], --map MAP [MAP ..]     Config file names
+    -i IMG, --img IMG                         Image path
+    -u, --upload                              Image upload to zabbix
+    -c CFG, --cfg CFG                         Config path
+    -s SCAN [SCAN ..], --scan SCAN [SCAN ..]  Map names in Zabbix
+    -f, --file                                Zabbix authentication from config file
+    -z ZABBIX, --zabbix ZABBIX                Zabbix server url
+    -l LOGIN, --login LOGIN                   Login
+    -p PWD, --pwd PWD                         Password
