@@ -26,6 +26,8 @@ Network weathermap for Zabbix like [Network Weathermap](http://network-weatherma
 
 * import template /template/weathermap.xml to zabbix
 * add Template Weathermap to host (for example use host zabbix server)
+* create new user with permissions Zabbix Admin
+* user must have read-only or read-write access to hosts and hosts groups present in map
 
 ###Screenshot ###
 ![map screenshot](https://cloud.githubusercontent.com/assets/12714643/14538840/63cf2870-0286-11e6-98f2-d67f548a0d54.png)
