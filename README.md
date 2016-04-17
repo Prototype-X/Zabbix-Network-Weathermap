@@ -42,7 +42,7 @@ Network weathermap for Zabbix like [Network Weathermap](http://network-weatherma
     -v, --version                             show version
     -h, --help                                show help
     -d, --debug                               Enable debug mode
-    -m MAP [MAP ..], --map MAP [MAP ..]     Config file names
+    -m MAP [MAP ..], --map MAP [MAP ..]       Config file names
     -i IMG, --img IMG                         Image path
     -u, --upload                              Image upload to zabbix
     -c CFG, --cfg CFG                         Config path
