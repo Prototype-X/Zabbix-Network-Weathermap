@@ -33,7 +33,7 @@ class WeathermapCLI(object):
         # self.parser.add_argument('-a', '--all', action='store_true', help='all')
 
         self.parser.add_argument('-s', '--scan', nargs='+', action='store', type=str, help='Map names in Zabbix')
-        self.parser.add_argument('-f', '--file', action='store_true', help='Zabbix authentication from config file')
+        self.parser.add_argument('-f', '--file', action='store_true', help='Zabbix authentication from map config file')
         self.parser.add_argument('-z', '--zabbix', action='store', type=str, help='Zabbix server url')
         self.parser.add_argument('-l', '--login', action='store', type=str, help='Login')
         self.parser.add_argument('-p', '--pwd', action='store', help='Password')

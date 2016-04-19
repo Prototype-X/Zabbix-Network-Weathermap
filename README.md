@@ -32,7 +32,14 @@ Network weathermap for Zabbix like [Network Weathermap](http://network-weatherma
 ###Screenshot ###
 ![map screenshot](https://cloud.githubusercontent.com/assets/12714643/14538840/63cf2870-0286-11e6-98f2-d67f548a0d54.png)
 
-###Man ###
+###Scripts ###
+
+Default path:
+* /opt/Zabbix-Network-Weathermap/mapcfgs - map config dir
+* /opt/Zabbix-Network-Weathermap/mapimgs - map images dir
+* /opt/Zabbix-Network-Weathermap/icons - map icons dir
+
+
     usage: weathermap.py [-v] [-h] [-d] [-m MAP [MAP ...]] [-i IMG] [-u] [-c CFG] [-s SCAN [SCAN ...]] [-f]
                          [-z ZABBIX] [-l LOGIN] [-p PWD]
 
@@ -47,7 +54,52 @@ Network weathermap for Zabbix like [Network Weathermap](http://network-weatherma
     -u, --upload                              Image upload to zabbix
     -c CFG, --cfg CFG                         Config path
     -s SCAN [SCAN ..], --scan SCAN [SCAN ..]  Map names in Zabbix
-    -f, --file                                Zabbix authentication from config file
+    -f, --file                                Zabbix authentication from map config file
     -z ZABBIX, --zabbix ZABBIX                Zabbix server url
     -l LOGIN, --login LOGIN                   Login
     -p PWD, --pwd PWD                         Password
+
+starter.py run weathermap.py and return execution time.
+
+For example, map name test_map.
+Map scanning for the first time, map config file not exist
+
+      weathermap.py -s test_map -z http://zabbix.example.com -l admin -p admin
+
+After execution will be created file /opt/Zabbix-Network-Weathermap/mapcfgs/test_map.cfg
+
+Open file test_map.cfg and set hostname and itemin, itemout.
+
+    [link-1]
+    node1 = node-Router
+    node2 = node-Switch
+    name1 =
+    name2 =
+    width = 15
+    hostname = Router
+    #itemin/itemout = item key name
+    itemin = ifHCInOctets[ge-0/0/0]
+    itemout = ifHCOutOctets[ge-0/0/0]
+
+Create map image and upload it in Zabbix
+
+    weathermap.py -m test_map.cfg -u
+
+
+Set Zabbix -> Monitoring -> Maps -> test_map -> Properties -> Background image -> test_map
+
+For auto update image or rescan map you can use cron or Template Weathermap.
+
+###Map config ###
+
+Option copy type bool, copy link and nodes in new config, when link and nodes not exist in zabbix map
+
+    [link-123sd34]
+    node1 = node-3434rert
+    node2 = node-sertgreg
+    name1 = netw
+    name2 = IPTV
+    copy = 1
+    hostname = D-Link-A
+    itemin = ifHCOutOctets[1/6]
+    itemout = ifHCInOctets[1/6]
