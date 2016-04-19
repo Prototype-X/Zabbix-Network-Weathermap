@@ -35,10 +35,12 @@ Network weathermap for Zabbix like [Network Weathermap](http://network-weatherma
 ###Scripts ###
 
 Default path:
-* /opt/Zabbix-Network-Weathermap/mapcfgs - map config dir
-* /opt/Zabbix-Network-Weathermap/mapimgs - map images dir
-* /opt/Zabbix-Network-Weathermap/icons - map icons dir
 
+/opt/Zabbix-Network-Weathermap/mapcfgs - map config dir
+
+/opt/Zabbix-Network-Weathermap/mapimgs - map images dir
+
+/opt/Zabbix-Network-Weathermap/icons - map icons dir
 
 
     usage: weathermap.py [-v] [-h] [-d] [-m MAP [MAP ...]] [-i IMG] [-u] [-c CFG] [-s SCAN [SCAN ...]] [-f]
@@ -63,6 +65,7 @@ Default path:
 starter.py run weathermap.py and return execution time.
 
 For example, map name test_map.
+
 Map scanning for the first time, map config file not exist
 
       weathermap.py -s test_map -z http://zabbix.example.com -l admin -p admin
