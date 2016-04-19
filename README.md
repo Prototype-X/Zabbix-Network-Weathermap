@@ -40,6 +40,7 @@ Default path:
 * /opt/Zabbix-Network-Weathermap/icons - map icons dir
 
 
+
     usage: weathermap.py [-v] [-h] [-d] [-m MAP [MAP ...]] [-i IMG] [-u] [-c CFG] [-s SCAN [SCAN ...]] [-f]
                          [-z ZABBIX] [-l LOGIN] [-p PWD]
 
