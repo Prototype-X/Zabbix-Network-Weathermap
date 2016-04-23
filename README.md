@@ -107,3 +107,5 @@ Option copy type bool, copy link and nodes in new config, when link and nodes no
     hostname = D-Link-A
     itemin = ifHCOutOctets[1/6]
     itemout = ifHCInOctets[1/6]
+
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Prototype-X/Zabbix-Network-Weathermap?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
