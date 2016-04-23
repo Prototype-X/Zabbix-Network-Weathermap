@@ -35,6 +35,7 @@ class Table(object):
         self.dt_obj = None
         self.date_now = None
         self.time_now = None
+        log.debug('Object Table created')
 
     def table_xy(self):
         for i in range(0, 11):
@@ -62,6 +63,7 @@ class Table(object):
                         self.rect_xy[10][3] + 5), outline='black', fill='white')
         draw.text((self.rect_xy[9][0] + 14, self.rect_xy[9][1] + 8), self.time_now, fill='black', font=self.font)
         draw.text((self.rect_xy[10][0] + 8, self.rect_xy[10][1] + 4), self.date_now, fill='black', font=self.font)
+        log.debug('Object Table draw')
 
 
 class Label(object):
@@ -85,6 +87,7 @@ class Label(object):
 
         if point:
             self.label_xy(point)
+        log.debug('Object Label created')
 
     def label_xy(self, point):
         """font_dict = {fontsize:symbol width}
@@ -113,6 +116,7 @@ class Node(object):
             self.label_obj = Label(label=label, point=[x, y], fontfile=fontfile, fontsize=fontsize)
         if self.icon:
             self.icon_point = self.icon_xy()
+        log.debug('Object Node created')
 
     def icon_xy(self):
         if os.path.isfile(self.icon_path + '/' + self.icon):
@@ -148,6 +152,7 @@ class Link(object):
         self.outcolor = None
         self.in_label = None
         self.out_label = None
+        log.debug('Object Link created')
 
     @staticmethod
     def _middle(x, y):
@@ -278,6 +283,7 @@ class Map(object):
         self.nodes = nodes
         self.image = self.create_image(len_x, len_y)
         self.draw = ImageDraw.Draw(self.image)
+        log.debug('Object Map created')
 
     def create_image(self, x, y):
         """ Create a new image with a white background
@@ -315,6 +321,7 @@ class Map(object):
             self._draw_polygon(link.input_points, link.incolor)
             # draw output arrow
             self._draw_polygon(link.output_points, link.outcolor)
+            log.debug('Draw arrows')
 
     def draw_labels(self):
         """ Draw labels method"""
@@ -326,12 +333,14 @@ class Map(object):
             for link in self.links:
                 self._draw_label(link.in_label)
                 self._draw_label(link.out_label)
+        log.debug('Draw labels')
 
     def draw_icons(self):
         if self.nodes is not None:
             for node in self.nodes:
                 if node.icon:
                     self._draw_icon(node.icon, node.icon_point)
+                    log.debug('Draw icons')
 
     def do(self):
         if self.table:
@@ -349,3 +358,4 @@ class Map(object):
         @param path: path to the file
         """
         self.image.save(path, "PNG")
+        log.debug('save img s%', path)

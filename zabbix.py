@@ -21,6 +21,7 @@ class ZabbixAgent(object):
         self.login = login
         self.password = password
         self.zbx_api = ZabbixAPI(url=url, use_authenticate=False, user=login, password=password)
+        log.debug('Object ZabbixAgent created')
         log.debug('API ver. %s', self.api_ver())
 
     def get_item_data(self, hostname, item):

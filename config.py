@@ -39,6 +39,7 @@ class ConfigTemplate(object):
         self.node = {'name': str(), 'label': str(), 'icon': str(), 'x': int(), 'y': int()}
         self.link = {'node1': str(), 'node2': str(), 'name1': str(), 'name2': str(), 'copy': '0', 'hostname': str(),
                      'itemin': str(), 'itemout': str(), 'width': int(), 'bandwidth': int()}
+        log.debug('Object ConfigTemplate created')
 
 
 class ConfigLoader(object):
@@ -53,6 +54,7 @@ class ConfigLoader(object):
         self.template = ConfigTemplate()
         self.cfg_dict = {}
         self.zbx = None
+        log.debug('Object ConfigLoader created')
 
     def load(self):
 
@@ -163,6 +165,7 @@ class ConfigCreate(object):
                           self.zbx.get_triggername, self.zbx.get_hostgroupname,
                           self.zbx.get_imagename]
         self.cfg_loader_obj = None
+        log.debug('Object ConfigCreate created')
 
     @staticmethod
     def random_label():
