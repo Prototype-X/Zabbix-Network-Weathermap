@@ -1,4 +1,6 @@
 # Zabbix-Network-Weathermap
+
+[![Join the chat at https://gitter.im/Prototype-X/Zabbix-Network-Weathermap](https://badges.gitter.im/Prototype-X/Zabbix-Network-Weathermap.svg)](https://gitter.im/Prototype-X/Zabbix-Network-Weathermap?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Code Health](https://landscape.io/github/Prototype-X/Zabbix-Network-Weathermap/master/landscape.svg?style=flat)](https://landscape.io/github/Prototype-X/Zabbix-Network-Weathermap/master)
 
 Network weathermap for Zabbix like [Network Weathermap](http://network-weathermap.com)
