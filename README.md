@@ -11,7 +11,7 @@ Network weathermap for Zabbix like [Network Weathermap](http://network-weatherma
 
 ###Requrements ###
 * Zabbix 3.0 (maybe work with Zabbix 2.0)
-* Python 3
+* Python 3.4.3 and above
 * libs: Pillow, py-zabbix
 
 ###Install ###
