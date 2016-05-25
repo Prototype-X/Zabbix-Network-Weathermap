@@ -113,6 +113,7 @@ Zabbix API performance is low. Zabbix agent run weathermap.py. Weathermap.py can
 zabbix_agentd.conf.
 
 Decision:
+
 1. Increase the timeout for example: zabbix_agentd.conf set Timeout=10
 
 2. One item to one map in Template Weathermap
