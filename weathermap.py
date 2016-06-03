@@ -136,3 +136,4 @@ if __name__ == '__main__':
 # TODO arg -a --all
 # TODO option copy in section link- +
 # TODO add default palette class
+# TODO remove python config and add YAML config
