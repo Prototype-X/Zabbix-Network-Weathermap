@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # __author__ = 'maximus'
+
 from PIL import Image, ImageDraw, ImageFont
 from datetime import datetime
 import math
@@ -10,8 +11,25 @@ import logging
 log = logging.getLogger(__name__)
 
 
+class Singleton(type):
+    _instances = {}
+
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
+        return cls._instances[cls]
+
+
+class Palette(metaclass=Singleton):
+    def __init__(self):
+        self.palette = ['#908C8C', '#FFFFFF', '#8000FF', '#0000FF', '#00EAEA', '#00FF00', '#FFFF00', '#FF9933',
+                        '#FF0000']
+        self.palette_default = ('#908C8C', '#FFFFFF', '#8000FF', '#0000FF', '#00EAEA', '#00FF00', '#FFFF00',
+                                '#FF9933', '#FF0000')
+
+
 class Table(object):
-    def __init__(self, fontfile, x=0, y=0, palette=None, fontsize=12, dt=True):
+    def __init__(self, fontfile, x=0, y=0, palette=Palette().palette_default, fontsize=12, dt=True):
         self.x = x
         self.y = y
         self.width_palet = 30
@@ -23,14 +41,11 @@ class Table(object):
         self.text_label = 'Traffic Load'
         self.rect_xy = []
         self.table_xy()
-        self.text = ['0-0%', '0-1%', '1-10%', '10-25%', '25-40%', '40-55%', '55-70%', '70-85%', '85-100%']
+        self.text = ('0-0%', '0-1%', '1-10%', '10-25%', '25-40%', '40-55%', '55-70%', '70-85%', '85-100%')
         self.fontfile = fontfile
         self.fontcolor = 'black'
         self.fontsize = fontsize
         self.font = ImageFont.truetype(self.fontfile, size=self.fontsize)
-        if not palette:
-            self.palette = ('#908C8C', '#FFFFFF', '#8000FF', '#0000FF', '#00EAEA',
-                            '#00FF00', '#FFFF00', '#FF9933', '#FF0000')
         self.dt = dt
         self.dt_obj = None
         self.date_now = None
@@ -132,22 +147,17 @@ class Node(object):
 class Link(object):
     """ A line between two Nodes. The line contains two arrows: one for an input
     value and one for an output value"""
-    def __init__(self, fontfile, node_a, node_b, bandwidth=1000, width=5, palette=None, fontsize=10):
+    def __init__(self, fontfile, node_a, node_b, bandwidth=1000, width=5, palette=Palette().palette_default,
+                 fontsize=10):
         self.node_a = node_a
         self.node_b = node_b
         self.fontfile = fontfile
         self.fontsize = fontsize
         self.bandwidth = bandwidth
         self.width = float(width)
-        if not palette:
-            self.palette = ('#908C8C', '#FFFFFF', '#8000FF', '#0000FF', '#00EAEA',
-                            '#00FF00', '#FFFF00', '#FF9933', '#FF0000')
-        else:
-            self.palette = palette
-
+        self.palette = palette
         self.input_points = self._get_input_arrow_points()
         self.output_points = self._get_output_arrow_points()
-
         self.incolor = None
         self.outcolor = None
         self.in_label = None
