@@ -38,7 +38,7 @@ class ConfigTemplate(object):
                          'link-': {'node1': str(), 'node2': str(), 'name1': str(), 'name2': str(), 'copy': '0',
                                    'hostname': str(), 'itemin': str(), 'itemout': str(), 'width': int(),
                                    'bandwidth': int()}
-                        }
+                         }
         log.debug('Object ConfigTemplate created')
 
 
@@ -48,6 +48,8 @@ class ConfigLoader(object):
         self.template = ConfigTemplate().template
         self.cfg_dict = {}
         self.zbx = None
+        self.obj_nodes = {}
+        self.obj_links = {}
         log.debug('Object ConfigLoader created')
 
     def load(self, path_cfg):
@@ -81,7 +83,7 @@ class ConfigLoader(object):
                             self.cfg_dict[link][cfg_opt]
                         except KeyError:
                             if cfg_opt == 'copy':
-                                self.cfg_dict[node][cfg_opt] = bool()
+                                self.cfg_dict[node][cfg_opt] = False
                                 continue
                             if cfg_opt == 'width':
                                 self.cfg_dict[node][cfg_opt] = int()
@@ -104,7 +106,7 @@ class ConfigLoader(object):
                     if cfg_sect == 'map' and cfg_opt == 'bgcolor':
                         self.cfg_dict[cfg_sect][cfg_opt] = str()
                     raise ConfigException('The option: {0} is missing in section: [{1}]'.format(cfg_sect, cfg_opt))
-        log.debug('Config check: successful')
+        log.debug('Config check: Ok')
 
     def create_map(self, font_path_fn, icon_path):
         palette = [self.cfg_dict['palette'][key] for key in sorted(self.cfg_dict['palette'])]
