@@ -106,6 +106,7 @@ class ConfigLoader(object):
         self.zbx = ZabbixAgent(self.cfg_dict['zabbix']['url'], self.cfg_dict['zabbix']['login'],
                                self.cfg_dict['zabbix']['password'])
 
+        print(self.cfg_dict)
         del base
         del node
         del link
