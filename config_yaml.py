@@ -58,6 +58,7 @@ class ConfigLoader(object):
                 self.cfg_dict = yaml.load(stream)
             except yaml.YAMLError as exc:
                 print(exc)
+        log.debug('Config loaded')
 
     def check(self):
         for cfg_sect in self.template:
