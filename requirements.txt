@@ -1,4 +1,3 @@
 Pillow
 py-zabbix
 pyyaml.yandex
-

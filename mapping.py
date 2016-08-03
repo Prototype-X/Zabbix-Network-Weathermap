@@ -26,6 +26,7 @@ class Palette(metaclass=Singleton):
                         '#FF0000']
         self.palette_default = ('#908C8C', '#FFFFFF', '#8000FF', '#0000FF', '#00EAEA', '#00FF00', '#FFFF00',
                                 '#FF9933', '#FF0000')
+        log.debug('Object singleton Palette created')
 
 
 class Table(object):
