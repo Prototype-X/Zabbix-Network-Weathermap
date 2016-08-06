@@ -43,16 +43,17 @@ class ConfigTemplate(metaclass=Singleton):
 
 
 class ConfigLoader(object):
-    def __init__(self):
+    def __init__(self, path_cfg: str):
 
         self.template = ConfigTemplate().template
         self.cfg_dict = {}
         self.zbx = None
         self.obj_nodes = {}
         self.obj_links = {}
+        self.load(path_cfg)
         log.debug('Object ConfigLoader created')
 
-    def load(self, path_cfg):
+    def load(self, path_cfg: str):
         with open(path_cfg, 'r') as stream:
             try:
                 self.cfg_dict = yaml.load(stream)
@@ -109,7 +110,7 @@ class ConfigLoader(object):
                     raise ConfigException('The option: {0} is missing in section: [{1}]'.format(cfg_sect, cfg_opt))
         log.debug('Config check: Ok')
 
-    def create_map(self, font_path_fn, icon_path):
+    def create_map(self, font_path_fn: str, icon_path: str):
         palette = [self.cfg_dict['palette'][key] for key in sorted(self.cfg_dict['palette'])]
         fontsize = int(self.cfg_dict['map']['fontsize'])
 
@@ -149,12 +150,12 @@ class ConfigLoader(object):
                       len_y=map_height, bgcolor=map_bgcolor)
         return map_obj
 
-    def upload(self, img_path_fn):
+    def upload(self, img_path_fn: str):
         self.zbx.image_to_zabbix(img_path_fn, self.cfg_dict['map']['name'])
 
 
 class ConfigCreate(object):
-    def __init__(self, map_data, zbx_agent):
+    def __init__(self, map_data: dict, zbx_agent: ZabbixAgent):
         self.zbx = zbx_agent
         self.map_data = map_data
         self.template = ConfigTemplate().template
@@ -225,7 +226,7 @@ class ConfigCreate(object):
         del elemid_dict
 
     @staticmethod
-    def _dict_to_orderdict(cfg):
+    def _dict_to_orderdict(cfg: dict) -> OrderedDict:
         cfg_order = OrderedDict()
         cfg_templ = OrderedDict([('map', ('name', 'bgcolor', 'fontsize', 'width', 'height')),
                                  ('zabbix', ('url', 'login', 'password')),
@@ -273,7 +274,7 @@ class ConfigCreate(object):
                 cfg_order[cfg_sect][cfg_opt] = cfg[cfg_sect][cfg_opt]
         return cfg_order
 
-    def save(self, path):
+    def save(self, path: str):
         cfg = self._dict_to_orderdict(self.map_config)
         with open(path + '/' + self.map_data['name'] + '.cfg', 'w') as cfg_file:
             try:
@@ -281,63 +282,59 @@ class ConfigCreate(object):
             except yaml.YAMLError as exc:
                 print(exc)
 
-    def check_map(self, old_cfg_path):
+    def check_map(self, old_cfg_path: str):
         old_cfg_path_fn = old_cfg_path + '/' + self.map_data['name'] + '.cfg'
         exist = os.path.exists(old_cfg_path_fn)
         if exist:
             self._compare(old_cfg_path_fn)
 
-    def _compare(self, old_cfg_path_file):
+    def _compare(self, old_cfg_path_file: str):
 
         self.cfg_loader_obj = ConfigLoader(old_cfg_path_file)
-        config_old = self.cfg_loader_obj.config
+        config_old = self.cfg_loader_obj.cfg_dict
 
-        for section in self.template.base.keys():
-            if section == 'zabbix' or section == 'map':
+        for section in self.template.keys():
+            if section == 'zabbix' or section == 'map' or section == 'node-' or section == 'link-':
                 continue
-            for option in self.template.base[section]:
+            for option in self.template[section]:
                 self.map_config[section][option] = config_old[section][option]
 
-        for section in self.map_config.sections():
+        for section in self.map_config:
             if 'node-' in section:
-                if config_old.has_section(section):
+                if config_old.get(section):
                     self.map_config[section]['label'] = config_old[section]['label']
                     self.map_config[section]['icon'] = config_old[section]['icon']
             if 'link-' in section:
-                if config_old.has_section(section):
+                if config_old.get(section):
                     self.map_config[section]['hostname'] = config_old[section]['hostname']
                     self.map_config[section]['itemin'] = config_old[section]['itemin']
                     self.map_config[section]['itemout'] = config_old[section]['itemout']
-                    if config_old.has_option(section, 'width'):
+                    if config_old.get(section, 'width'):
                         self.map_config[section]['width'] = config_old[section]['width']
-                    if config_old.has_option(section, 'bandwidth'):
+                    if config_old.get(section, 'bandwidth'):
                         self.map_config[section]['bandwidth'] = config_old[section]['bandwidth']
 
-        for section in config_old.sections():
-            if 'link-' in section:
-                try:
-                    config_old[section]['copy']
-                except KeyError:
-                    continue
-                if config_old[section]['copy']:
-                    new_section = 'link-' + self.random_label()
-                    node1_sect = config_old[section]['node1']
-                    node2_sect = config_old[section]['node2']
-                    node1_new_sect = 'node-' + self.random_label()
-                    node2_new_sect = 'node-' + self.random_label()
+        for section in [link for link in config_old.keys() if 'link-' in link]:
 
-                    self.map_config.add_section(new_section)
-                    for option in config_old.options(section):
-                        if 'node1' in option:
-                            self.map_config[new_section][option] = node1_new_sect
-                        elif 'node2' in option:
-                            self.map_config[new_section][option] = node2_new_sect
-                        else:
-                            self.map_config[new_section][option] = config_old[section][option]
+            if config_old[section].get('copy'):
+                new_section = 'link-' + self.random_label()
+                node1_sect = config_old[section]['node1']
+                node2_sect = config_old[section]['node2']
+                node1_new_sect = 'node-' + self.random_label()
+                node2_new_sect = 'node-' + self.random_label()
 
-                    self.map_config.add_section(node1_new_sect)
-                    self.map_config.add_section(node2_new_sect)
-                    for option in config_old.options(node1_sect):
-                        self.map_config[node1_new_sect][option] = config_old[node1_sect][option]
-                    for option in config_old.options(node2_sect):
-                        self.map_config[node2_new_sect][option] = config_old[node2_sect][option]
+                self.map_config.update({new_section: None})
+                for option in config_old[section]:
+                    if 'node1' in option:
+                        self.map_config[new_section][option] = node1_new_sect
+                    elif 'node2' in option:
+                        self.map_config[new_section][option] = node2_new_sect
+                    else:
+                        self.map_config[new_section][option] = config_old[section][option]
+
+                self.map_config.update({node1_new_sect: None})
+                self.map_config.update({node2_new_sect: None})
+                for option in config_old[node1_sect]:
+                    self.map_config[node1_new_sect][option] = config_old[node1_sect][option]
+                for option in config_old[node2_sect]:
+                    self.map_config[node2_new_sect][option] = config_old[node2_sect][option]
