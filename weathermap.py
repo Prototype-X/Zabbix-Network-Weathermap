@@ -7,8 +7,8 @@ import logging
 import os
 import sys
 
-from config import ConfigLoader, ConfigCreate
-# from config_yaml import  ConfigLoader, ConfigCreate
+# from config import ConfigLoader, ConfigCreate
+from config_yaml import ConfigLoader, ConfigCreate
 from zabbix import ZabbixAgent
 
 
@@ -77,7 +77,7 @@ class WeathermapCLI(object):
         if self.args.cfg:
             self.cfg_path = self.args.cfg
         for map_n in self.args.scan:
-            cfg = ConfigLoader(self.cfg_path + '/' + map_n + '.cfg')
+            cfg = ConfigLoader(self.cfg_path + '/' + map_n + '.yaml')
             cfg.load()
             map_data = cfg.zbx.scan_map(map_n)
             scan_map = ConfigCreate(map_data, cfg.zbx)

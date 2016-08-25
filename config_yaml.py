@@ -7,7 +7,7 @@ import yaml
 from collections import OrderedDict
 import os
 import logging
-import configparser
+# import configparser
 from zabbix import ZabbixAgent
 from mapping import Node, Link, Map, Table, Palette, Singleton
 from PIL import Image
@@ -22,18 +22,19 @@ class ConfigException(Exception):
     def __init__(self, message):
         self.message = message
 
-    # def __str__(self):
-    #     return str(self.message).format(self.error)
+        # def __str__(self):
+        #     return str(self.message).format(self.error)
 
 
 class ConfigTemplate(metaclass=Singleton):
     """ This is config template. DO NOT MODIFY THIS OBJECT."""
+
     def __init__(self):
         self.template = {'zabbix': {'url': str(), 'login': str(), 'password': str()},
                          'map': {'name': str(), 'bgcolor': str(), 'fontsize': 10, 'width': int(), 'height': int()},
                          'table': {'show': False, 'x': int(), 'y': int()},
                          'link': {'width': 10, 'bandwidth': 100},
-                         'palette': Palette().palette_default,
+                         'palette': Palette().palette,
                          'node-': {'name': str(), 'label': str(), 'icon': str(), 'x': int(), 'y': int()},
                          'link-': {'node1': str(), 'node2': str(), 'name1': str(), 'name2': str(), 'copy': '0',
                                    'hostname': str(), 'itemin': str(), 'itemout': str(), 'width': int(),
@@ -164,15 +165,15 @@ class ConfigCreate(object):
                           self.zbx.get_triggername, self.zbx.get_hostgroupname,
                           self.zbx.get_imagename]
         self.cfg_loader_obj = None
+        self.setup_yaml()
         log.debug('Object ConfigCreate created')
 
-    @staticmethod
-    def setup_yaml():
+    def setup_yaml(self):
         """ StackOverflow Driven Development
         http://stackoverflow.com/a/8661021 """
 
-        def represent_dict_order(self, data):
-            return self.represent_mapping('tag:yaml.org,2002:map', data.items())
+        def represent_dict_order(yaml_self, data):
+            return yaml_self.represent_mapping('tag:yaml.org,2002:map', data.items())
 
         yaml.add_representer(OrderedDict, represent_dict_order)
 
@@ -189,8 +190,8 @@ class ConfigCreate(object):
         self.map_config['map'] = {'name': self.map_data['name'],
                                   'bgcolor': self.template['map']['bgcolor'],
                                   'fontsize': self.template['map']['fontsize'],
-                                  'width': self.map_data['width'],
-                                  'height': self.map_data['height']
+                                  'width': int(self.map_data['width']),
+                                  'height': int(self.map_data['height'])
                                   }
         self.map_config['table'] = {'show': self.template['table']['show'],
                                     'x': int(self.map_data['width']) - 100,
@@ -210,9 +211,11 @@ class ConfigCreate(object):
             image_b64code = self.zbx.image_get(node['iconid_off'])
             im = Image.open(BytesIO(base64.b64decode(image_b64code)))
             width, height = im.size
-            self.map_config['node-' + nodeid] = {'x': int(node['x']) + int(width//2),
-                                                 'y': int(node['y']) + int(height//2)
-                                                 }
+            self.map_config['node-' + nodeid] = {
+                                                 'name': self.dict_call[int(node['elementtype'])](node['elementid']),
+                                                 'x': int(node['x']) + int(width // 2),
+                                                 'y': int(node['y']) + int(height // 2)
+                                                }
 
         for link in self.map_data['links']:
             self.map_config['link-' + link['linkid']] = {'node1': 'node-' + link['selementid2'],
@@ -243,9 +246,9 @@ class ConfigCreate(object):
                 for node in sorted([node for node in cfg.keys() if cfg_sect in node]):
                     cfg_order[node] = OrderedDict()
                     for cfg_opt in cfg_templ[cfg_sect]:
-                        if cfg_opt == 'icon' and not cfg[node][cfg_opt]:
+                        if cfg_opt == 'icon' and cfg_opt not in cfg[node]:
                             continue
-                        if cfg_opt == 'label' and not cfg[node][cfg_opt]:
+                        if cfg_opt == 'label' and cfg_opt not in cfg[node]:
                             continue
                         cfg_order[node][cfg_opt] = cfg[node][cfg_opt]
                 continue
@@ -254,11 +257,11 @@ class ConfigCreate(object):
                 for link in sorted([link for link in cfg.keys() if cfg_sect in link]):
                     cfg_order[link] = OrderedDict()
                     for cfg_opt in cfg_templ[cfg_sect]:
-                        if cfg_opt == 'copy' and not cfg[link][cfg_opt]:
+                        if cfg_opt == 'copy' and cfg_opt not in cfg[link]:
                             continue
-                        if cfg_opt == 'width' and not cfg[link][cfg_opt]:
+                        if cfg_opt == 'width' and cfg_opt not in cfg[link]:
                             continue
-                        if cfg_opt == 'bandwith' and not cfg[link][cfg_opt]:
+                        if cfg_opt == 'bandwith' and cfg_opt not in cfg[link]:
                             continue
                         cfg_order[link][cfg_opt] = cfg[link][cfg_opt]
                 continue
@@ -269,21 +272,21 @@ class ConfigCreate(object):
                 continue
 
             for cfg_opt in cfg_templ[cfg_sect]:
-                if cfg_sect == 'map' and cfg_opt == 'bgcolor' and not cfg[cfg_sect][cfg_opt]:
+                if cfg_sect == 'map' and cfg_opt == 'bgcolor' and cfg_opt not in cfg[cfg_sect]:
                     continue
                 cfg_order[cfg_sect][cfg_opt] = cfg[cfg_sect][cfg_opt]
         return cfg_order
 
     def save(self, path: str):
         cfg = self._dict_to_orderdict(self.map_config)
-        with open(path + '/' + self.map_data['name'] + '.cfg', 'w') as cfg_file:
+        with open(path + '/' + self.map_data['name'] + '.yaml', 'w') as cfg_file:
             try:
                 yaml.dump(cfg, cfg_file, explicit_start=True, explicit_end=True, default_flow_style=False)
             except yaml.YAMLError as exc:
                 print(exc)
 
     def check_map(self, old_cfg_path: str):
-        old_cfg_path_fn = old_cfg_path + '/' + self.map_data['name'] + '.cfg'
+        old_cfg_path_fn = old_cfg_path + '/' + self.map_data['name'] + '.yaml'
         exist = os.path.exists(old_cfg_path_fn)
         if exist:
             self._compare(old_cfg_path_fn)
@@ -293,25 +296,31 @@ class ConfigCreate(object):
         self.cfg_loader_obj = ConfigLoader(old_cfg_path_file)
         config_old = self.cfg_loader_obj.cfg_dict
 
-        for section in self.template.keys():
-            if section == 'zabbix' or section == 'map' or section == 'node-' or section == 'link-':
+        for section in [sect for sect in self.template.keys()
+                        if sect != 'zabbix' and sect != 'map' and sect != 'node-' and sect != 'link-']:
+
+            if section == 'palette':
+                self.map_config[section] = config_old[section]
                 continue
+
             for option in self.template[section]:
                 self.map_config[section][option] = config_old[section][option]
 
         for section in self.map_config:
             if 'node-' in section:
                 if config_old.get(section):
-                    self.map_config[section]['label'] = config_old[section]['label']
-                    self.map_config[section]['icon'] = config_old[section]['icon']
+                    if config_old[section].get('label'):
+                        self.map_config[section]['label'] = config_old[section]['label']
+                    if config_old[section].get('icon'):
+                        self.map_config[section]['icon'] = config_old[section]['icon']
             if 'link-' in section:
                 if config_old.get(section):
                     self.map_config[section]['hostname'] = config_old[section]['hostname']
                     self.map_config[section]['itemin'] = config_old[section]['itemin']
                     self.map_config[section]['itemout'] = config_old[section]['itemout']
-                    if config_old.get(section, 'width'):
+                    if config_old[section].get('width'):
                         self.map_config[section]['width'] = config_old[section]['width']
-                    if config_old.get(section, 'bandwidth'):
+                    if config_old[section].get('bandwidth'):
                         self.map_config[section]['bandwidth'] = config_old[section]['bandwidth']
 
         for section in [link for link in config_old.keys() if 'link-' in link]:

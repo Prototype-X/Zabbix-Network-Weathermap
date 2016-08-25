@@ -28,6 +28,9 @@ class Palette(metaclass=Singleton):
                                 '#FF9933', '#FF0000')
         log.debug('Object singleton Palette created')
 
+    def reset(self):
+        self.palette = list(self.palette_default)
+
 
 class Table(object):
     def __init__(self, fontfile, x=0, y=0, palette=Palette().palette_default, fontsize=12, dt=True):
