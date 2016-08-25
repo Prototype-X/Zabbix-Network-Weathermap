@@ -1,0 +1,15 @@
+# TODO config.py: configparser.ConfigParser().has_section convert to str.lower()
+# TODO tests for all classes
+# TODO logging for all classes, detail logging
+# TODO add new option fontsize in section [map] +
+# TODO add new option fontsize in section [node-]
+# TODO add new option fontsize in section [link-]
+# TODO add new option fontsize in section [table]
+# TODO add new option bgcolor in section [map] +
+# TODO add table date and time +
+# TODO python or bash start script, run weathermap from zabbix agent or item with external check +
+# TODO arg -a --all
+# TODO option copy in section link- +
+# TODO add default palette class
+# TODO change PyYaml to ruamel.yaml
+# TODO config converter cfg -> yaml
