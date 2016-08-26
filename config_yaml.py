@@ -36,7 +36,7 @@ class ConfigTemplate(metaclass=Singleton):
                          'link': {'width': 10, 'bandwidth': 100},
                          'palette': Palette().palette,
                          'node-': {'name': str(), 'label': str(), 'icon': str(), 'x': int(), 'y': int()},
-                         'link-': {'node1': str(), 'node2': str(), 'name1': str(), 'name2': str(), 'copy': '0',
+                         'link-': {'node1': str(), 'node2': str(), 'name1': str(), 'name2': str(), 'copy': 0,
                                    'hostname': str(), 'itemin': str(), 'itemout': str(), 'width': int(),
                                    'bandwidth': int()}
                          }

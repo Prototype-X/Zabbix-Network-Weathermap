@@ -2,10 +2,13 @@
 # -*- coding: utf-8 -*-
 # __author__ = 'maximus'
 
+import argparse
 import configparser
 import logging
 import yaml
 from collections import OrderedDict
+import sys
+import os
 # from mapping import Palette, Singleton
 
 log = logging.getLogger(__name__)
@@ -142,15 +145,21 @@ class ConfigLoader(object):
         del base
         del node
         del link
+        return self.cfg_dict
 
 
 class ConfigConvert(object):
     def __init__(self, cfg_dict: dict):
         self.cfg_dict = cfg_dict
         self.template = ConfigTemplateYaml().template
-        self.map_config = {}
         self.setup_yaml()
+        self.palette_convert()
         log.debug('Object ConfigCreate created')
+
+    def palette_convert(self):
+        palette_new = list([self.cfg_dict['palette'][str(i)] for i in range(0, 9)])
+        print(palette_new)
+        self.cfg_dict['palette'] = palette_new
 
     @staticmethod
     def setup_yaml():
@@ -209,11 +218,12 @@ class ConfigConvert(object):
                 if cfg_sect == 'map' and cfg_opt == 'bgcolor' and cfg_opt not in cfg[cfg_sect]:
                     continue
                 cfg_order[cfg_sect][cfg_opt] = cfg[cfg_sect][cfg_opt]
+        print(cfg_order)
         return cfg_order
 
     def save(self, path: str):
-        cfg = self._dict_to_orderdict(self.map_config)
-        with open(path + '/' + self.cfg_dict['name'] + '.yaml', 'w') as cfg_file:
+        cfg = self._dict_to_orderdict(self.cfg_dict)
+        with open(path + '/' + self.cfg_dict['map']['name'] + '.yaml', 'w') as cfg_file:
             try:
                 yaml.dump(cfg, cfg_file, explicit_start=True, explicit_end=True, default_flow_style=False)
             except yaml.YAMLError as exc:
@@ -221,8 +231,16 @@ class ConfigConvert(object):
 
 
 def main():
-    pass
-
+    root_path = str(os.path.dirname(os.path.abspath(__file__)))
+    parser = argparse.ArgumentParser(conflict_handler='resolve', description='Convert to yaml')
+    parser.add_argument('cfg', action='store', type=str, help='Old style config file')
+    args = parser.parse_args()
+    if args.cfg:
+        cfg_dict = ConfigLoader(args.cfg).load()
+        cfg_yaml = ConfigConvert(cfg_dict)
+        cfg_yaml.save(root_path)
+    else:
+        sys.exit()
 
 if __name__ == '__main__':
     main()
