@@ -168,7 +168,8 @@ class ConfigCreate(object):
         self.setup_yaml()
         log.debug('Object ConfigCreate created')
 
-    def setup_yaml(self):
+    @staticmethod
+    def setup_yaml():
         """ StackOverflow Driven Development
         http://stackoverflow.com/a/8661021 """
 
