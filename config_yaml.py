@@ -282,7 +282,8 @@ class ConfigCreate(object):
         cfg = self._dict_to_orderdict(self.map_config)
         with open(path + '/' + self.map_data['name'] + '.yaml', 'w') as cfg_file:
             try:
-                yaml.dump(cfg, cfg_file, explicit_start=True, explicit_end=True, default_flow_style=False)
+                yaml.dump(cfg, cfg_file, explicit_start=True, explicit_end=True,
+                          default_flow_style=False, allow_unicode=True)
             except yaml.YAMLError as exc:
                 print(exc)
 
