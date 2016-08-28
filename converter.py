@@ -141,11 +141,56 @@ class ConfigLoader(object):
         log.debug('Config dict: %s', base)
         self.cfg_dict = base.copy()
 
-        print(self.cfg_dict)
+
         del base
         del node
         del link
+        self.fix_types_dict()
+        # print(self.cfg_dict)
         return self.cfg_dict
+
+    def fix_types_dict(self):
+        for section in self.cfg_dict:
+            if section == 'map':
+                self.cfg_dict[section]['fontsize'] = int(self.cfg_dict[section]['fontsize'])
+                self.cfg_dict[section]['width'] = int(self.cfg_dict[section]['width'])
+                self.cfg_dict[section]['height'] = int(self.cfg_dict[section]['height'])
+            if section == 'table':
+                self.cfg_dict[section]['show'] = bool(self.cfg_dict[section]['show'])
+                self.cfg_dict[section]['x'] = int(self.cfg_dict[section]['x'])
+                self.cfg_dict[section]['y'] = int(self.cfg_dict[section]['y'])
+            if section == 'link':
+                self.cfg_dict[section]['bandwidth'] = int(self.cfg_dict[section]['bandwidth'])
+                self.cfg_dict[section]['width'] = int(self.cfg_dict[section]['width'])
+            if 'node-' in section:
+                self.cfg_dict[section]['x'] = int(self.cfg_dict[section]['x'])
+                self.cfg_dict[section]['y'] = int(self.cfg_dict[section]['y'])
+                try:
+                    self.cfg_dict[section]['label']
+                except KeyError:
+                    continue
+
+                try:
+                    self.cfg_dict[section]['icon']
+                except KeyError:
+                    continue
+
+                if not self.cfg_dict[section]['label']:
+                    del self.cfg_dict[section]['label']
+
+                if not self.cfg_dict[section]['icon']:
+                    del self.cfg_dict[section]['icon']
+
+            if 'link-' in section:
+                try:
+                    self.cfg_dict[section]['copy']
+                except KeyError:
+                    continue
+
+                self.cfg_dict[section]['copy'] = bool(self.cfg_dict[section]['copy'])
+                if not self.cfg_dict[section]['copy']:
+                    del self.cfg_dict[section]['copy']
+
 
 
 class ConfigConvert(object):
@@ -158,7 +203,7 @@ class ConfigConvert(object):
 
     def palette_convert(self):
         palette_new = list([self.cfg_dict['palette'][str(i)] for i in range(0, 9)])
-        print(palette_new)
+        # print(palette_new)
         self.cfg_dict['palette'] = palette_new
 
     @staticmethod
@@ -218,14 +263,14 @@ class ConfigConvert(object):
                 if cfg_sect == 'map' and cfg_opt == 'bgcolor' and cfg_opt not in cfg[cfg_sect]:
                     continue
                 cfg_order[cfg_sect][cfg_opt] = cfg[cfg_sect][cfg_opt]
-        print(cfg_order)
+        # print(cfg_order)
         return cfg_order
 
     def save(self, path: str):
         cfg = self._dict_to_orderdict(self.cfg_dict)
         with open(path + '/' + self.cfg_dict['map']['name'] + '.yaml', 'w') as cfg_file:
             try:
-                yaml.dump(cfg, cfg_file, explicit_start=True, explicit_end=True, default_flow_style=False)
+                yaml.dump(cfg, cfg_file, explicit_start=True, explicit_end=True, default_flow_style=False, allow_unicode=True)
             except yaml.YAMLError as exc:
                 print(exc)
 
