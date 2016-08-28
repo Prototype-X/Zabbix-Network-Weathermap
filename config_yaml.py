@@ -237,8 +237,9 @@ class ConfigCreate(object):
                                  ('palette', None),
                                  ('link', ('bandwidth', 'width')),
                                  ('node-', ('name', 'label', 'icon', 'x', 'y')),
-                                 ('link-',
-                                  ('node1', 'node2', 'name1', 'name2', 'copy', 'hostname', 'itemin', 'itemout'))])
+                                 ('link-', ('node1', 'node2', 'name1', 'name2', 'copy', 'width', 'bandwidth',
+                                            'hostname', 'itemin', 'itemout'))
+                                 ])
 
         for cfg_sect in cfg_templ:
 
@@ -261,7 +262,7 @@ class ConfigCreate(object):
                             continue
                         if cfg_opt == 'width' and cfg_opt not in cfg[link]:
                             continue
-                        if cfg_opt == 'bandwith' and cfg_opt not in cfg[link]:
+                        if cfg_opt == 'bandwidth' and cfg_opt not in cfg[link]:
                             continue
                         cfg_order[link][cfg_opt] = cfg[link][cfg_opt]
                 continue
@@ -333,7 +334,7 @@ class ConfigCreate(object):
                 node1_new_sect = 'node-' + self.random_label()
                 node2_new_sect = 'node-' + self.random_label()
 
-                self.map_config.update({new_section: None})
+                self.map_config.update({new_section: dict()})
                 for option in config_old[section]:
                     if 'node1' in option:
                         self.map_config[new_section][option] = node1_new_sect
@@ -342,8 +343,8 @@ class ConfigCreate(object):
                     else:
                         self.map_config[new_section][option] = config_old[section][option]
 
-                self.map_config.update({node1_new_sect: None})
-                self.map_config.update({node2_new_sect: None})
+                self.map_config.update({node1_new_sect: dict()})
+                self.map_config.update({node2_new_sect: dict()})
                 for option in config_old[node1_sect]:
                     self.map_config[node1_new_sect][option] = config_old[node1_sect][option]
                 for option in config_old[node2_sect]:

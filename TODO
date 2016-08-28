@@ -13,5 +13,5 @@
 # TODO add default palette class
 # TODO change PyYaml to ruamel.yaml +
 # TODO config converter cfg -> yaml +
-# TODO link optional parameters: name1, name2, bandwidth
+# TODO link optional parameters: name1, name2, bandwidth, width
 # TODO node optional parameters: label, icon

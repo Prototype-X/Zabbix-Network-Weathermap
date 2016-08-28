@@ -192,6 +192,16 @@ class ConfigLoader(object):
                 if not self.cfg_dict[section]['copy']:
                     del self.cfg_dict[section]['copy']
 
+                if self.cfg_dict[section].get('width'):
+                    self.cfg_dict[section]['width'] = int(self.cfg_dict[section]['width'])
+                    if int(self.cfg_dict[section]['width']) == int(self.cfg_dict['link']['width']):
+                        del self.cfg_dict[section]['width']
+
+                if self.cfg_dict[section].get('bandwidth'):
+                    self.cfg_dict[section]['bandwidth'] = int(self.cfg_dict[section]['bandwidth'])
+                    if int(self.cfg_dict[section]['bandwidth']) == int(self.cfg_dict['link']['bandwidth']):
+                        del self.cfg_dict[section]['bandwidth']
+
 
 class ConfigConvert(object):
     def __init__(self, cfg_dict: dict):
@@ -225,8 +235,9 @@ class ConfigConvert(object):
                                  ('palette', None),
                                  ('link', ('bandwidth', 'width')),
                                  ('node-', ('name', 'label', 'icon', 'x', 'y')),
-                                 ('link-',
-                                  ('node1', 'node2', 'name1', 'name2', 'copy', 'hostname', 'itemin', 'itemout'))])
+                                 ('link-', ('node1', 'node2', 'name1', 'name2', 'copy', 'width', 'bandwidth',
+                                            'hostname', 'itemin', 'itemout'))
+                                 ])
 
         for cfg_sect in cfg_templ:
 
@@ -249,7 +260,7 @@ class ConfigConvert(object):
                             continue
                         if cfg_opt == 'width' and cfg_opt not in cfg[link]:
                             continue
-                        if cfg_opt == 'bandwith' and cfg_opt not in cfg[link]:
+                        if cfg_opt == 'bandwidth' and cfg_opt not in cfg[link]:
                             continue
                         cfg_order[link][cfg_opt] = cfg[link][cfg_opt]
                 continue
@@ -263,7 +274,7 @@ class ConfigConvert(object):
                 if cfg_sect == 'map' and cfg_opt == 'bgcolor' and cfg_opt not in cfg[cfg_sect]:
                     continue
                 cfg_order[cfg_sect][cfg_opt] = cfg[cfg_sect][cfg_opt]
-        # print(cfg_order)
+        print(cfg_order)
         return cfg_order
 
     def save(self, path: str):
