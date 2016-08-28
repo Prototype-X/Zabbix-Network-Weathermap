@@ -110,6 +110,7 @@ Option copy type bool, copy link and nodes in new config, when link and nodes no
       itemout: ifHCInOctets[1/6]
 
 ###Notice ###
+
 Zabbix API performance is low. Zabbix agent run weathermap.py. Weathermap.py can be terminated by timeout, set in
 zabbix_agentd.conf.
 
