@@ -5,7 +5,7 @@ Network weathermap for Zabbix like [Network Weathermap](http://network-weatherma
 
 ###Features ###
 * Get source data from Zabbix
-* Generate map config from Zabbix map
+* Generate YAML config from Zabbix map
 * Create image with map in PNG format
 * Upload image to Zabbix
 * Support for map elements with the type: host, map
@@ -13,12 +13,12 @@ Network weathermap for Zabbix like [Network Weathermap](http://network-weatherma
 ###Requrements ###
 * Zabbix 3.0 (maybe work with Zabbix 2.0)
 * Python 3.4.3 and above
-* libs: Pillow, py-zabbix
+* libs: Pillow, py-zabbix, ruamel.yaml
 
 ###Install ###
 
     sudo apt-get install python3-pip python3-pil
-    sudo pip3 install py-zabbix
+    sudo pip3 install py-zabbix ruamel.yaml
     unzip Zabbix-Network-Weathermap-master.zip -d /opt
     chown -R zabbix:zabbix /opt/Zabbix-Network-Weathermap/*
     chmod a+x /opt/Zabbix-Network-Weathermap/starter.py
@@ -75,16 +75,16 @@ After execution will be created file /opt/Zabbix-Network-Weathermap/mapcfgs/test
 
 Open file test_map.cfg and set hostname and itemin, itemout.
 
-    [link-1]
-    node1 = node-Router
-    node2 = node-Switch
-    name1 =
-    name2 =
-    width = 15
-    hostname = Router
-    #itemin/itemout = item key name
-    itemin = ifHCInOctets[ge-0/0/0]
-    itemout = ifHCOutOctets[ge-0/0/0]
+    link-1:
+      node1: node-Router
+      node2: node-Switch
+      name1: R1
+      name2: SW1
+      width: 15
+      hostname = Router
+      #itemin/itemout = item key name
+      itemin: ifHCInOctets[ge-0/0/0]
+      itemout: ifHCOutOctets[ge-0/0/0]
 
 Create map image and upload it in Zabbix
 
@@ -99,15 +99,15 @@ For auto update image or rescan map you can use cron or Template Weathermap.
 
 Option copy type bool, copy link and nodes in new config, when link and nodes not exist in zabbix map
 
-    [link-123sd34]
-    node1 = node-3434rert
-    node2 = node-sertgreg
-    name1 = netw
-    name2 = IPTV
-    copy = 1
-    hostname = D-Link-A
-    itemin = ifHCOutOctets[1/6]
-    itemout = ifHCInOctets[1/6]
+    link-lyonlz7x:
+      node1: node-nridx7c0
+      node2: node-uwf443jw
+      name1: net1
+      name2: net2
+      copy: true
+      hostname: R10
+      itemin: ifHCOutOctets[1/6]
+      itemout: ifHCInOctets[1/6]
 
 ###Notice ###
 Zabbix API performance is low. Zabbix agent run weathermap.py. Weathermap.py can be terminated by timeout, set in
@@ -121,4 +121,11 @@ Decision:
 
 3. Use cron to run the scripts
 
+If you need convert from old style config to YAML format, use **converter.py**
+
+    user@pc:~$ converter.py /path-to-old-style-cfg/map.cfg
+    user@pc:~$ ls /path-to-old-style-cfg
+    map.cfg
+    map.yaml
+    
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Prototype-X/Zabbix-Network-Weathermap?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
