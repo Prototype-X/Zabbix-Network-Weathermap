@@ -77,7 +77,6 @@ class WeathermapCLI(object):
             self.cfg_path = self.args.cfg
         for map_n in self.args.scan:
             cfg = ConfigLoader(self.cfg_path + '/' + map_n + '.yaml')
-            cfg.load()
             map_data = cfg.zbx.scan_map(map_n)
             scan_map = ConfigCreate(map_data, cfg.zbx)
             scan_map.create()
@@ -93,14 +92,13 @@ class WeathermapCLI(object):
             self.img_path = self.args.img
         for map_fn in self.args.map:
             cfg = ConfigLoader(self.cfg_path + '/' + map_fn)
-            cfg.load()
             map_obj = cfg.create_map(self.font_path_fn, self.icon_path)
             map_obj.do()
             # map_obj.show()
-            map_obj.save_img(self.img_path + '/' + map_fn[:-4] + '.png')
+            map_obj.save_img(self.img_path + '/' + map_fn[:-5] + '.png')
 
             if self.args.upload:
-                cfg.upload(self.img_path + '/' + map_fn[:-4] + '.png')
+                cfg.upload(self.img_path + '/' + map_fn[:-5] + '.png')
 
             del cfg, map_obj
 

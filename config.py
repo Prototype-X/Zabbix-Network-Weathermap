@@ -46,9 +46,9 @@ class ConfigLoader(object):
 
         self.template = ConfigTemplate().template
         self.cfg_dict = {}
-        self.zbx = None
         self.obj_nodes = {}
         self.obj_links = {}
+        self.zbx = None
         self.load(path_cfg)
         log.debug('Object ConfigLoader created')
 
@@ -58,6 +58,9 @@ class ConfigLoader(object):
                 self.cfg_dict = yaml3ed.load(stream)
             except yaml3ed.YAMLError as exc:
                 print(exc)
+        self.check()
+        self.zbx = ZabbixAgent(self.cfg_dict['zabbix']['url'], self.cfg_dict['zabbix']['login'],
+                               self.cfg_dict['zabbix']['password'])
         log.debug('Config loaded')
 
     def check(self):
@@ -69,10 +72,10 @@ class ConfigLoader(object):
                             self.cfg_dict[node][cfg_opt]
                         except KeyError:
                             if cfg_opt == 'icon':
-                                self.cfg_dict[node][cfg_opt] = str()
+                                # self.cfg_dict[node][cfg_opt] = str()
                                 continue
                             if cfg_opt == 'label':
-                                self.cfg_dict[node][cfg_opt] = str()
+                                # self.cfg_dict[node][cfg_opt] = str()
                                 continue
                             raise ConfigException('The option: {0} is missing in section: [{1}]'
                                                   .format(cfg_sect, cfg_opt))
@@ -84,13 +87,13 @@ class ConfigLoader(object):
                             self.cfg_dict[link][cfg_opt]
                         except KeyError:
                             if cfg_opt == 'copy':
-                                self.cfg_dict[node][cfg_opt] = False
+                                # self.cfg_dict[link][cfg_opt] = False
                                 continue
                             if cfg_opt == 'width':
-                                self.cfg_dict[node][cfg_opt] = int()
+                                # self.cfg_dict[link][cfg_opt] = int()
                                 continue
-                            if cfg_opt == 'bandwith':
-                                self.cfg_dict[node][cfg_opt] = int()
+                            if cfg_opt == 'bandwidth':
+                                # self.cfg_dict[link][cfg_opt] = int()
                                 continue
                             raise ConfigException('The option: {0} is missing in section: [{1}]'
                                                   .format(cfg_sect, cfg_opt))
@@ -104,27 +107,49 @@ class ConfigLoader(object):
                 try:
                     self.cfg_dict[cfg_sect][cfg_opt]
                 except KeyError:
-                    if cfg_sect == 'map' and cfg_opt == 'bgcolor':
-                        self.cfg_dict[cfg_sect][cfg_opt] = str()
+                    # if cfg_sect == 'map' and cfg_opt == 'bgcolor':
+                        # self.cfg_dict[cfg_sect][cfg_opt] = str()
+                    if cfg_sect == 'link-' or cfg_sect == 'node-':
+                        continue
                     raise ConfigException('The option: {0} is missing in section: [{1}]'.format(cfg_sect, cfg_opt))
         log.debug('Config check: Ok')
 
     def create_map(self, font_path_fn: str, icon_path: str):
-        palette = [self.cfg_dict['palette'][key] for key in sorted(self.cfg_dict['palette'])]
+        self.obj_nodes = {section: None for section in self.cfg_dict if 'node-' in section}
+        self.obj_links = {section: None for section in self.cfg_dict if 'link-' in section}
+        palette = self.cfg_dict['palette']
         fontsize = int(self.cfg_dict['map']['fontsize'])
 
         for node in self.obj_nodes.keys():
             x = int(self.cfg_dict[node]['x'])
             y = int(self.cfg_dict[node]['y'])
-            label = self.cfg_dict[node]['label']
-            icon = self.cfg_dict[node]['icon']
+
+            if self.cfg_dict[node].get('label'):
+                label = self.cfg_dict[node]['label']
+            else:
+                label = None
+
+            if self.cfg_dict[node].get('icon'):
+                icon = self.cfg_dict[node]['icon']
+            else:
+                icon = None
+
             self.obj_nodes[node] = (Node(font_path_fn, icon_path, x=x, y=y, label=label, icon=icon, fontsize=fontsize))
 
         for link in self.obj_links.keys():
             node1 = self.obj_nodes[self.cfg_dict[link]['node1']]
             node2 = self.obj_nodes[self.cfg_dict[link]['node2']]
-            bandwidth = int(self.cfg_dict[link]['bandwidth'])
-            width = int(self.cfg_dict[link]['width'])
+
+            if self.cfg_dict[link].get('bandwidth'):
+                bandwidth = self.cfg_dict[link]['bandwidth']
+            else:
+                bandwidth = self.cfg_dict['link']['bandwidth']
+
+            if self.cfg_dict[link].get('width'):
+                width = self.cfg_dict[link]['width']
+            else:
+                width = self.cfg_dict['link']['width']
+
             hostname = self.cfg_dict[link]['hostname']
             item_in = self.cfg_dict[link]['itemin']
             item_out = self.cfg_dict[link]['itemout']
