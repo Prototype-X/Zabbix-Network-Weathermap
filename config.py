@@ -24,7 +24,7 @@ class ConfigException(Exception):
         #     return str(self.message).format(self.error)
 
 
-class ConfigTemplate(metaclass=Singleton):
+class ConfigTemplate(metaclass=Singleton):  # noqa
     """ This is config template. DO NOT MODIFY THIS OBJECT."""
 
     def __init__(self):

@@ -20,7 +20,7 @@ class Singleton(type):
         return cls._instances[cls]
 
 
-class Palette(metaclass=Singleton):
+class Palette(metaclass=Singleton):  # noqa
     def __init__(self):
         self.palette = ['#908C8C', '#FFFFFF', '#8000FF', '#0000FF', '#00EAEA', '#00FF00', '#FFFF00', '#FF9933',
                         '#FF0000']
