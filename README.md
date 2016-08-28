@@ -83,7 +83,7 @@ Open file test_map.cfg and set hostname and itemin, itemout.
       name1: R1
       name2: SW1
       width: 15
-      hostname = Router
+      hostname: Router
       #itemin/itemout = item key name
       itemin: ifHCInOctets[ge-0/0/0]
       itemout: ifHCOutOctets[ge-0/0/0]
