@@ -1,0 +1,72 @@
+%YAML 1.2
+---
+map:
+  name: example
+  bgcolor: ''
+  fontsize: 10
+  width: 1200
+  height: 800
+zabbix:
+  url: http://zabbix.example.ru
+  login: admin
+  password: admin
+table:
+  show: true
+  x: 1100
+  y: 100
+palette:
+- '#908C8C'
+- '#FFFFFF'
+- '#8000FF'
+- '#0000FF'
+- '#00EAEA'
+- '#00FF00'
+- '#FFFF00'
+- '#FF9933'
+- '#FF0000'
+link:
+  bandwidth: 100
+  width: 10
+node-Router:
+  name: Русские буквы
+  label: R1
+  icon: Router64.png
+  x: 625
+  y: 225
+node-Router2:
+  name: ''
+  label: R2
+  icon: Router64.png
+  x: 625
+  y: 225
+node-Switch:
+  name: ''
+  label: SW1
+  icon: Switch64.png
+  x: 75
+  y: 375
+node-Switch2:
+  name: ''
+  label: SW2
+  icon: Switch64.png
+  x: 75
+  y: 375
+link-1:
+  node1: node-Router
+  node2: node-Switch
+  name1: ''
+  name2: ''
+  width: 15
+  hostname: Router
+  itemin: ifHCInOctets[ge-0/0/0]
+  itemout: ifHCOutOctets[ge-0/0/0]
+link-2:
+  node1: node-Router2
+  node2: node-Switch2
+  name1: ''
+  name2: ''
+  bandwidth: 1000
+  hostname: Router2
+  itemin: ifHCInOctets[ge-0/0/1]
+  itemout: ifHCOutOctets[ge-0/0/1]
+...

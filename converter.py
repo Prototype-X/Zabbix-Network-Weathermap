@@ -141,7 +141,6 @@ class ConfigLoader(object):
         log.debug('Config dict: %s', base)
         self.cfg_dict = base.copy()
 
-
         del base
         del node
         del link
@@ -274,7 +273,7 @@ class ConfigConvert(object):
                 if cfg_sect == 'map' and cfg_opt == 'bgcolor' and cfg_opt not in cfg[cfg_sect]:
                     continue
                 cfg_order[cfg_sect][cfg_opt] = cfg[cfg_sect][cfg_opt]
-        print(cfg_order)
+        # print(cfg_order)
         return cfg_order
 
     def save(self, path: str):
