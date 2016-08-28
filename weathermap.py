@@ -7,8 +7,7 @@ import logging
 import os
 import sys
 
-# from config import ConfigLoader, ConfigCreate
-from config_yaml import ConfigLoader, ConfigCreate
+from config import ConfigLoader, ConfigCreate
 from zabbix import ZabbixAgent
 
 
