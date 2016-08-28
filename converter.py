@@ -278,23 +278,24 @@ class ConfigConvert(object):
 
     def save(self, path: str):
         cfg = self._dict_to_orderdict(self.cfg_dict)
-        with open(path + '/' + self.cfg_dict['map']['name'] + '.yaml', 'w') as cfg_file:
+        with open(path[:-3] + 'yaml', 'w') as cfg_file:
             try:
                 yaml3ed.dump(cfg, cfg_file, explicit_start=True, explicit_end=True,
-                             default_flow_style=False, allow_unicode=True, version=(1, 2))
+                             default_flow_style=False, allow_unicode=True, version=(1, 2),
+                             indent=2)
             except yaml3ed.YAMLError as exc:
                 print(exc)
 
 
 def main():
-    root_path = str(os.path.dirname(os.path.abspath(__file__)))
+    # root_path = str(os.path.dirname(os.path.abspath(__file__)))
     parser = argparse.ArgumentParser(conflict_handler='resolve', description='Convert to yaml')
     parser.add_argument('cfg', action='store', type=str, help='Old style config file')
     args = parser.parse_args()
     if args.cfg:
         cfg_dict = ConfigLoader(args.cfg).load()
         cfg_yaml = ConfigConvert(cfg_dict)
-        cfg_yaml.save(root_path)
+        cfg_yaml.save(args.cfg)
     else:
         sys.exit()
 
