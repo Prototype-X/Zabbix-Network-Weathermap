@@ -5,7 +5,7 @@
 import argparse
 import configparser
 import logging
-import yaml
+import ruamel.yaml as yaml3ed
 from collections import OrderedDict
 import sys
 import os
@@ -186,11 +186,11 @@ class ConfigLoader(object):
                     self.cfg_dict[section]['copy']
                 except KeyError:
                     continue
-
+                if isinstance(self.cfg_dict[section]['copy'], str):
+                    self.cfg_dict[section]['copy'] = int(self.cfg_dict[section]['copy'])
                 self.cfg_dict[section]['copy'] = bool(self.cfg_dict[section]['copy'])
                 if not self.cfg_dict[section]['copy']:
                     del self.cfg_dict[section]['copy']
-
 
 
 class ConfigConvert(object):
@@ -214,7 +214,7 @@ class ConfigConvert(object):
         def represent_dict_order(yaml_self, data):
             return yaml_self.represent_mapping('tag:yaml.org,2002:map', data.items())
 
-        yaml.add_representer(OrderedDict, represent_dict_order)
+        yaml3ed.add_representer(OrderedDict, represent_dict_order)
 
     @staticmethod
     def _dict_to_orderdict(cfg: dict) -> OrderedDict:
@@ -270,8 +270,9 @@ class ConfigConvert(object):
         cfg = self._dict_to_orderdict(self.cfg_dict)
         with open(path + '/' + self.cfg_dict['map']['name'] + '.yaml', 'w') as cfg_file:
             try:
-                yaml.dump(cfg, cfg_file, explicit_start=True, explicit_end=True, default_flow_style=False, allow_unicode=True)
-            except yaml.YAMLError as exc:
+                yaml3ed.dump(cfg, cfg_file, explicit_start=True, explicit_end=True,
+                             default_flow_style=False, allow_unicode=True, version=(1, 2))
+            except yaml3ed.YAMLError as exc:
                 print(exc)
 
 

@@ -2,8 +2,7 @@
 # -*- coding: utf-8 -*-
 # __author__ = 'maximus'
 
-
-import yaml
+import ruamel.yaml as yaml3ed
 from collections import OrderedDict
 import os
 import logging
@@ -57,8 +56,8 @@ class ConfigLoader(object):
     def load(self, path_cfg: str):
         with open(path_cfg, 'r') as stream:
             try:
-                self.cfg_dict = yaml.load(stream)
-            except yaml.YAMLError as exc:
+                self.cfg_dict = yaml3ed.load(stream)
+            except yaml3ed.YAMLError as exc:
                 print(exc)
         log.debug('Config loaded')
 
@@ -176,7 +175,7 @@ class ConfigCreate(object):
         def represent_dict_order(yaml_self, data):
             return yaml_self.represent_mapping('tag:yaml.org,2002:map', data.items())
 
-        yaml.add_representer(OrderedDict, represent_dict_order)
+        yaml3ed.add_representer(OrderedDict, represent_dict_order)
 
     @staticmethod
     def random_label():
@@ -282,9 +281,9 @@ class ConfigCreate(object):
         cfg = self._dict_to_orderdict(self.map_config)
         with open(path + '/' + self.map_data['name'] + '.yaml', 'w') as cfg_file:
             try:
-                yaml.dump(cfg, cfg_file, explicit_start=True, explicit_end=True,
-                          default_flow_style=False, allow_unicode=True)
-            except yaml.YAMLError as exc:
+                yaml3ed.dump(cfg, cfg_file, explicit_start=True, explicit_end=True,
+                             default_flow_style=False, allow_unicode=True, version=(1, 2))
+            except yaml3ed.YAMLError as exc:
                 print(exc)
 
     def check_map(self, old_cfg_path: str):
