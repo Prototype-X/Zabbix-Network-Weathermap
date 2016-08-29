@@ -5,6 +5,9 @@
 
 Network weathermap for Zabbix like [Network Weathermap](http://network-weathermap.com)
 
+###Screenshot ###
+![map screenshot](https://cloud.githubusercontent.com/assets/12714643/14538840/63cf2870-0286-11e6-98f2-d67f548a0d54.png)
+
 ###Features ###
 * Get source data from Zabbix
 * Generate YAML config from Zabbix map
@@ -28,15 +31,53 @@ Network weathermap for Zabbix like [Network Weathermap](http://network-weatherma
     chmod a+x /opt/Zabbix-Network-Weathermap/weathermap.py
     cp /opt/Zabbix-Network-Weathermap/template/userparameter_weathermap.conf /etc/zabbix/zabbix_agentd.d/
 
-* import template /template/weathermap.xml to zabbix
-* add Template Weathermap to host (for example use host zabbix server)
-* create new user with permissions Zabbix Admin
-* user must have read-only or read-write access to hosts and hosts groups present in map
+* Import template /template/weathermap.xml to zabbix
+* Add Template Weathermap to host (for example use host zabbix server)
+* Create new user with permissions Zabbix Admin
+* User must have read-only or read-write access to hosts and hosts groups present in map
+* Go to Zabbix -> Configuration -> Template Weathermap -> Macros:
 
-###Screenshot ###
-![map screenshot](https://cloud.githubusercontent.com/assets/12714643/14538840/63cf2870-0286-11e6-98f2-d67f548a0d54.png)
+     {$SCANFILE} - When map config exist. If you change map remove host or change position host, configuration will be updated in accordance with changes on the map.
+     
+     {$SCANMAP} - First time scan map, config file not exist. Create file with map configuration.
+     
+     {$UPDATE} - Only create image, like old style Network Weathermap.
+     
+     {$UPLOAD} - Create and upload image to Zabbix.
 
-###Scripts ###
+* Check Zabbix -> Configuration -> Hosts -> Host with Weathermap template -> Applications -> Weathermap -> Items -> Status
+
+* Create file with map configuration:
+        
+      weathermap.py -s mapname1 mapnameN -z http://zabbix.example.com -l admin -p admin
+    OR
+    
+    Zabbix -> Template Weathermap -> Macros -> {$SCANMAP} -> Value
+    
+* Open file mapname1.yaml and set hostname and itemin, itemout.
+
+      link-1:
+        node1: node-Router
+        node2: node-Switch
+        name1: R1
+        name2: SW1
+        width: 15
+        hostname: Router
+        #itemin/itemout = item key name
+        itemin: ifHCInOctets[ge-0/0/0]
+        itemout: ifHCOutOctets[ge-0/0/0]
+
+* Create map image and upload it to Zabbix:
+    
+      weathermap.py -m mapname1.yaml -u
+  OR
+  
+  Zabbix -> Template Weathermap -> Macros -> {$UPLOAD} -> Value
+
+* Set Zabbix -> Monitoring -> Maps -> mapname1 -> Properties -> Background image -> mapname1
+
+
+###Scripts note###
 
 Default path:
 
@@ -66,39 +107,84 @@ Default path:
     -l LOGIN, --login LOGIN                   Login
     -p PWD, --pwd PWD                         Password
 
-starter.py run weathermap.py and return execution time.
-
-For example, map name test_map.
-
-Map scanning for the first time, map config file not exist
-
-      weathermap.py -s test_map -z http://zabbix.example.com -l admin -p admin
-
-After execution will be created file /opt/Zabbix-Network-Weathermap/mapcfgs/test_map.cfg
-
-Open file test_map.cfg and set hostname and itemin, itemout.
-
-    link-1:
-      node1: node-Router
-      node2: node-Switch
-      name1: R1
-      name2: SW1
-      width: 15
-      hostname: Router
-      #itemin/itemout = item key name
-      itemin: ifHCInOctets[ge-0/0/0]
-      itemout: ifHCOutOctets[ge-0/0/0]
-
-Create map image and upload it in Zabbix
-
-    weathermap.py -m test_map.cfg -u
-
-
-Set Zabbix -> Monitoring -> Maps -> test_map -> Properties -> Background image -> test_map
+**starter.py** run weathermap.py and return execution time.
 
 For auto update image or rescan map you can use cron or Template Weathermap.
 
 ###Map config ###
+        
+    %YAML 1.2
+    ---
+    map:
+      name: mapname1
+      bgcolor: ''           #background RGB color, default transparent
+      fontsize: 10
+      width: 1200
+      height: 800
+    zabbix:
+      url: http://zabbix.example.com
+      login: admin
+      password: admin
+    table:                  # show legend and date time
+      show: true
+      x: 1100
+      y: 100
+    palette:                # RGB color arrow
+    - '#908C8C'
+    - '#FFFFFF'
+    - '#8000FF'
+    - '#0000FF'
+    - '#00EAEA'
+    - '#00FF00'
+    - '#FFFF00'
+    - '#FF9933'
+    - '#FF0000'
+    link:                   # default settings link
+      bandwidth: 100        # in Mbits/s
+      width: 10             # width arrow in pixels
+    node-Router:
+      name: Символы         # Get from Zabbix
+      label: R1             # For old style Network Weathermap, draw label
+      icon: Router64.png    # For old style Network Weathermap, draw icon, if path not exist, use defaults
+      x: 625
+      y: 225
+    node-Router2:
+      name: ''
+      label: R2
+      icon: Router64.png
+      x: 625
+      y: 225
+    node-Switch:
+      name: ''
+      label: SW1
+      icon: Switch64.png
+      x: 75
+      y: 375
+    node-Switch2:
+      name: ''
+      label: SW2
+      icon: Switch64.png
+      x: 75
+      y: 375
+    link-1:
+      node1: node-Router
+      node2: node-Switch
+      name1: ''             # For human readability, get from zabbix
+      name2: ''             # For human readability, get from zabbix
+      width: 15             # Override default settings in link
+      hostname: Router
+      itemin: ifHCInOctets[ge-0/0/0]
+      itemout: ifHCOutOctets[ge-0/0/0]
+    link-2:
+      node1: node-Router2
+      node2: node-Switch2
+      name1: ''
+      name2: ''
+      bandwidth: 1000        # Override default settings in link
+      hostname: Router2
+      itemin: ifHCInOctets[ge-0/0/1]
+      itemout: ifHCOutOctets[ge-0/0/1]
+    ...
 
 Option copy type bool, copy link and nodes in new config, when link and nodes not exist in zabbix map
 
