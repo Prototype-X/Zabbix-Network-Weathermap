@@ -25,7 +25,7 @@ Network weathermap for Zabbix like [Network Weathermap](http://network-weatherma
     sudo apt-get install python3-pip python-pip python3-pil
     sudo pip3 install py-zabbix
     sudo pip install ruamel.yaml
-    unzip Zabbix-Network-Weathermap-master.zip -d /opt
+    unzip Zabbix-Network-Weathermap-1.1.zip -d /opt
     chown -R zabbix:zabbix /opt/Zabbix-Network-Weathermap/*
     chmod a+x /opt/Zabbix-Network-Weathermap/starter.py
     chmod a+x /opt/Zabbix-Network-Weathermap/weathermap.py
