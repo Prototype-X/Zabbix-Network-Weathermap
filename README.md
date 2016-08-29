@@ -56,16 +56,16 @@ Network weathermap for Zabbix like [Network Weathermap](http://network-weatherma
     
 * Open file mapname1.yaml and set hostname and itemin, itemout.
 
-      link-1:
-        node1: node-Router
-        node2: node-Switch
-        name1: R1
-        name2: SW1
-        width: 15
-        hostname: Router
-        #itemin/itemout = item key name
-        itemin: ifHCInOctets[ge-0/0/0]
-        itemout: ifHCOutOctets[ge-0/0/0]
+          link-1:
+            node1: node-Router
+            node2: node-Switch
+            name1: R1
+            name2: SW1
+            width: 15
+            hostname: Router
+            #itemin/itemout = item key name
+            itemin: ifHCInOctets[ge-0/0/0]
+            itemout: ifHCOutOctets[ge-0/0/0]
 
 * Create map image and upload it to Zabbix:
     
