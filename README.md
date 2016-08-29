@@ -50,7 +50,6 @@ Network weathermap for Zabbix like [Network Weathermap](http://network-weatherma
 * Create file with map configuration:
         
         weathermap.py -s mapname1 mapnameN -z http://zabbix.example.com -l admin -p admin
-    
     OR
     
     Zabbix -> Template Weathermap -> Macros -> {$SCANMAP} -> Value
@@ -70,9 +69,7 @@ Network weathermap for Zabbix like [Network Weathermap](http://network-weatherma
 
 * Create map image and upload it to Zabbix:
     
-      
-      weathermap.py -m mapname1.yaml -u
-  
+        weathermap.py -m mapname1.yaml -u  
   OR
   
   Zabbix -> Template Weathermap -> Macros -> {$UPLOAD} -> Value
