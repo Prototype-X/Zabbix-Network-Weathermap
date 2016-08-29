@@ -217,5 +217,7 @@ If you need convert from old style config to YAML format, use **converter.py**
     user@pc:~$ ls /path-to-old-style-cfg
     map.cfg
     map.yaml
+
+For a better look of map, set the link type a dot and color like background.
     
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Prototype-X/Zabbix-Network-Weathermap?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
