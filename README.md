@@ -49,8 +49,7 @@ Network weathermap for Zabbix like [Network Weathermap](http://network-weatherma
 
 * Create file with map configuration:
         
-      
-      weathermap.py -s mapname1 mapnameN -z http://zabbix.example.com -l admin -p admin
+        weathermap.py -s mapname1 mapnameN -z http://zabbix.example.com -l admin -p admin
     
     OR
     
