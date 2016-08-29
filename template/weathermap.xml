@@ -208,11 +208,11 @@
                 </macro>
                 <macro>
                     <macro>{$UPDATE}</macro>
-                    <value>-m mapname1.cfg mapnameN.cfg -i /var/www/weather</value>
+                    <value>-m mapname1.yaml mapnameN.yaml -i /var/www/weather</value>
                 </macro>
                 <macro>
                     <macro>{$UPLOAD}</macro>
-                    <value>-m mapname1.cfg mapnameN.cfg -u</value>
+                    <value>-m mapname1.yaml mapnameN.yaml -u</value>
                 </macro>
             </macros>
             <templates/>
