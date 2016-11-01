@@ -227,7 +227,11 @@ class ConfigCreate(object):
 
         for node in self.map_data['selements']:
             nodeid = node['selementid']
-            nodename = self.dict_call[int(node['elementtype'])](node['elementid'])
+            if int(node['elementtype']) == 4:
+                nodename = self.dict_call[int(node['elementtype'])](node['iconid_off'])
+            else:
+                nodename = self.dict_call[int(node['elementtype'])](node['elementid'])
+
             elemid_dict[node['selementid']] = nodename
 
             self.map_config['node-' + nodeid] = {'name': nodename, 'label': str(), 'icon': str()}
@@ -236,7 +240,7 @@ class ConfigCreate(object):
             im = Image.open(BytesIO(base64.b64decode(image_b64code)))
             width, height = im.size
             self.map_config['node-' + nodeid] = {
-                                                 'name': self.dict_call[int(node['elementtype'])](node['elementid']),
+                                                 'name': nodename,
                                                  'x': int(node['x']) + int(width // 2),
                                                  'y': int(node['y']) + int(height // 2)
                                                 }

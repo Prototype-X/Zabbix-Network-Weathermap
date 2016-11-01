@@ -13,7 +13,7 @@ Network weathermap for Zabbix like [Network Weathermap](http://network-weatherma
 * Generate YAML config from Zabbix map
 * Create image with map in PNG format
 * Upload image to Zabbix
-* Support for map elements with the type: host, map
+* Support for map elements with the type: host, map, image
 
 ###Requrements ###
 * Zabbix 3.0 (maybe work with Zabbix 2.0)
