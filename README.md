@@ -53,7 +53,7 @@ Network weathermap for Zabbix like [Network Weathermap](http://network-weatherma
     
     Zabbix -> Template Weathermap -> Macros -> {$SCANMAP} -> Value
     
-* Open file mapname1.yaml and set hostname and itemin, itemout.
+* Open file /opt/Zabbix-Network-Weathermap/mapcfgs/mapname1.yaml and set hostname and itemin, itemout.
 
           link-1:
             node1: node-Router
