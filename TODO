@@ -1,8 +1,9 @@
-# TODO write tests for all classes !!!
-# TODO logging for all classes, detail logging
-# TODO add new option fontsize in section [node-] ?
-# TODO add new option fontsize in section [link-] ?
-# TODO add new option fontsize in section [table] ?
-# TODO arg -a --all ?
-# TODO NOTE: link optional parameters: name1, name2, bandwidth, width, copy
-# TODO NOTE: node optional parameters: label, icon
+todo write tests for all classes !!!
+todo logging for all classes, detail logging
+todo add new option fontsize in section [node-] ?
+todo add new option fontsize in section [link-] ?
+todo add new option fontsize in section [table] ?
+todo arg -a --all ?
+todo NOTE: link optional parameters: name1, name2, bandwidth, width, copy
+todo NOTE: node optional parameters: label, icon
+todo render map if errors occured
