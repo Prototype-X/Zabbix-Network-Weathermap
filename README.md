@@ -5,22 +5,22 @@
 
 Network weathermap for Zabbix like [Network Weathermap](http://network-weathermap.com)
 
-###Screenshot ###
+### Screenshot ###
 ![map screenshot](https://cloud.githubusercontent.com/assets/12714643/14538840/63cf2870-0286-11e6-98f2-d67f548a0d54.png)
 
-###Features ###
+### Features ###
 * Get source data from Zabbix
 * Generate YAML config from Zabbix map
 * Create image with map in PNG format
 * Upload image to Zabbix
 * Support for map elements with the type: host, map, image
 
-###Requrements ###
+### Requrements ###
 * Zabbix 3.0 (maybe work with Zabbix 2.0)
 * Python 3.4.3 and above
 * libs: Pillow, py-zabbix, ruamel.yaml
 
-###Install ###
+### Install ###
 
     sudo apt-get install python3-pip python-pip python3-pil
     sudo pip3 install py-zabbix ruamel.yaml
@@ -76,7 +76,7 @@ Network weathermap for Zabbix like [Network Weathermap](http://network-weatherma
 * Set Zabbix -> Monitoring -> Maps -> mapname1 -> Properties -> Background image -> mapname1
 
 
-###Scripts note###
+### Scripts note###
 
 Default path:
 
@@ -110,7 +110,7 @@ Default path:
 
 For auto update image or rescan map you can use cron or Template Weathermap.
 
-###Map config ###
+### Map config ###
         
     %YAML 1.2
     ---
@@ -197,7 +197,7 @@ Option copy type bool, copy link and nodes in new config, when link and nodes no
       itemin: ifHCOutOctets[1/6]
       itemout: ifHCInOctets[1/6]
 
-###Notice ###
+### Notice ###
 
 Zabbix API performance is low. Zabbix agent run weathermap.py. Weathermap.py can be terminated by timeout, set in
 zabbix_agentd.conf.
