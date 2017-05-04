@@ -76,7 +76,7 @@ Network weathermap for Zabbix like [Network Weathermap](http://network-weatherma
 * Set Zabbix -> Monitoring -> Maps -> mapname1 -> Properties -> Background image -> mapname1
 
 
-### Scripts note###
+### Scripts note ###
 
 Default path:
 
