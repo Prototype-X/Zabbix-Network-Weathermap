@@ -55,7 +55,7 @@ class ConfigLoader(object):
     def load(self, path_cfg: str):
         with open(path_cfg, 'r') as stream:
             try:
-                self.cfg_dict = yaml3ed.load(stream)
+                self.cfg_dict = yaml3ed.safe_load(stream)
             except yaml3ed.YAMLError as exc:
                 print(exc)
         self.check()
