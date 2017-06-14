@@ -31,6 +31,7 @@ Network weathermap for Zabbix like [Network Weathermap](http://network-weatherma
     chmod a+x /opt/Zabbix-Network-Weathermap/weathermap.py
     cp /opt/Zabbix-Network-Weathermap/template/userparameter_weathermap.conf /etc/zabbix/zabbix_agentd.d/
 
+* Copy /template/userparemeter_weathermap.conf to /etc/zabbix/zabbix_agentd.d/ and reload zabbix-agent
 * Import template /template/weathermap.xml to zabbix
 * Add Template Weathermap to host (for example use host zabbix server)
 * Create new user with permissions Zabbix Admin
