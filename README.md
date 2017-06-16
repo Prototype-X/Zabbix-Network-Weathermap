@@ -33,7 +33,7 @@ Network weathermap for Zabbix like [Network Weathermap](http://network-weatherma
 
 * Copy /template/userparemeter_weathermap.conf to /etc/zabbix/zabbix_agentd.d/ and reload zabbix-agent
 * Import template /template/weathermap.xml to zabbix
-* Add Template Weathermap to host (for example use host zabbix server)
+* Add Template Weathermap to host where use zabbix agent (for example use host zabbix server)
 * Create new user with permissions Zabbix Admin
 * User must have read-only or read-write access to hosts and hosts groups present in map
 * Go to Zabbix -> Configuration -> Template Weathermap -> Macros:
@@ -110,7 +110,7 @@ Default path:
 
 **starter.py** run weathermap.py and return execution time.
 
-For auto update image or rescan map you can use cron or Template Weathermap.
+For auto update image or rescan map you can use cron, systemd or Template Weathermap.
 
 ### Map config ###
         
