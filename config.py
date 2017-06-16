@@ -150,13 +150,24 @@ class ConfigLoader(object):
             else:
                 width = self.cfg_dict['link']['width']
 
+            self.obj_links[link] = (Link(font_path_fn, node1, node2, bandwidth=bandwidth, width=width,
+                                         palette=palette, fontsize=fontsize))
+
             hostname = self.cfg_dict[link]['hostname']
             item_in = self.cfg_dict[link]['itemin']
             item_out = self.cfg_dict[link]['itemout']
-            self.obj_links[link] = (Link(font_path_fn, node1, node2, bandwidth=bandwidth, width=width,
-                                         palette=palette, fontsize=fontsize))
-            data_in, data_out = self.zbx.get_item_data2(hostname, item_in, item_out)
-            self.obj_links[link].data(in_bps=data_in, out_bps=data_out)
+
+            if hostname and item_in and item_out:
+                data_in, data_out = self.zbx.get_item_data2(hostname, item_in, item_out)
+                self.obj_links[link].data(in_bps=data_in, out_bps=data_out)
+            elif hostname and item_in:
+                data_in = self.zbx.get_item_data(hostname, item_in)
+                self.obj_links[link].data(in_bps=data_in, out_bps=0)
+            elif hostname and item_out:
+                data_out = self.zbx.get_item_data(hostname, item_out)
+                self.obj_links[link].data(in_bps=0, out_bps=data_out)
+            else:
+                self.obj_links[link].data(in_bps=0, out_bps=0)
 
         if int(self.cfg_dict['table']['show']):
             table = Table(font_path_fn, x=int(self.cfg_dict['table']['x']), y=int(self.cfg_dict['table']['y']),
