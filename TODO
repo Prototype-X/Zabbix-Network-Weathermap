@@ -6,4 +6,4 @@ todo add new option fontsize in section [table] ?
 todo arg -a --all ?
 todo NOTE: link optional parameters: name1, name2, bandwidth, width, copy
 todo NOTE: node optional parameters: label, icon
-todo render map if errors occured
+todo render map if errors occured -/+
