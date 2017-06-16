@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # __author__ = 'maximus'
+
 from unittest import TestCase
 from mapping import Map, Node, Table, Link
 import os
 import hashlib
+import warnings
 
 
 class TestMap(TestCase):
 
     def setUp(self):
-        self.hash = 'fd6069568a5d453a8572fbfafb517f14115bc093deee67554c468b61ac734d61'
+        self.hash = '43228a6d34e15561dcb179a9e4388489e4634093348a57f34801a12fd548f203'
         self.root_path = str(os.path.dirname(os.path.abspath(__file__))).replace('tests', '')
         self.font_path = self.root_path + 'fonts'
         self.font_path_fn = self.root_path + 'fonts/DejaVuSansMono.ttf'
@@ -39,7 +41,7 @@ class TestMap(TestCase):
         self.new_map = Map([link_a, link_b, link_c, link_d, link_e], [a, b, c, d, e], table=table, len_x=800, len_y=800)
 
     def test_map(self):
-
+        warnings.simplefilter("ignore", ResourceWarning)
         self.new_map.do()
         # new_map.show()
         self.new_map.save_img(self.img_path + '/test.png')

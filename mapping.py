@@ -145,6 +145,7 @@ class Node(object):
         width, height = im.size
         x = int(self.x - width/2)
         y = int(self.y - height/2)
+        im.close()
         return [x, y]
 
 
@@ -328,6 +329,7 @@ class Map(object):
             im = Image.open(icon)
         im.convert("RGBA")
         self.image.paste(im, (icon_point[0], icon_point[1]), mask=im)
+        im.close()
 
     def draw_arrows(self):
         for link in self.links:
@@ -373,3 +375,4 @@ class Map(object):
         """
         self.image.save(path, "PNG")
         log.debug('save img s%', path)
+        self.image.close()
