@@ -64,7 +64,7 @@ Network weathermap for Zabbix like [Network Weathermap](http://network-weatherma
             name2: SW1
             width: 15
             hostname: Router
-            #itemin/itemout = item key name
+            #itemin/itemout = item key
             itemin: ifHCInOctets[ge-0/0/0]
             itemout: ifHCOutOctets[ge-0/0/0]
 
@@ -107,7 +107,20 @@ Default path:
     -z ZABBIX, --zabbix ZABBIX                Zabbix server url
     -l LOGIN, --login LOGIN                   Login
     -p PWD, --pwd PWD                         Password
-
+    
+    # Examples:
+    # When map config exist. If you change map remove host or change position host, configuration will be updated in accordance with changes on the map.
+    weathermap.py -s mapname1 mapnameN -f
+    
+    # First time scan map, config file not exist. Create file with map configuration.
+    weathermap.py -s mapname1 mapnameN -z http://zabbix.example.ru -l login -p password
+    
+    # Only create image, like old style Network Weathermap.
+    weathermap.py -m mapname1.yaml mapnameN.yaml -i /var/www/weather
+    
+    # Create and upload image to Zabbix.
+    weathermap.py -m mapname1.yaml mapnameN.yaml -u
+    
 **starter.py** run weathermap.py and return execution time.
 
 For auto update image or rescan map you can use cron, systemd or Template Weathermap.
