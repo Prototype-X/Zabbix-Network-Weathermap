@@ -25,10 +25,11 @@ class ZabbixAgent(object):
         log.debug('API ver. %s', self.api_ver())
 
     def get_item_data(self, hostname, item):
-        hostid = self.zbx_api.host.get(filter={'name': hostname}, output='shorten')[0]['hostid']
-        log.debug('hostID %s', hostid)
-        if not hostid:
+        reply = self.zbx_api.host.get(filter={'name': hostname}, output='shorten')
+        if not reply:
             raise ZbxException("hostname: {} not found".format(hostname))
+        hostid = reply[0]['hostid']
+        log.debug('hostID %s', hostid)
 
         item_data = self.zbx_api.item.get(filter={'hostid': hostid, 'key_': item}, output=['lastvalue'])
         log.debug('itemID %s', hostid)
@@ -40,10 +41,11 @@ class ZabbixAgent(object):
         return int(item_data[0]['lastvalue'])
 
     def get_item_data2(self, hostname, item_in, item_out):
-        hostid = self.zbx_api.host.get(filter={'name': hostname}, output='shorten')[0]['hostid']
-        log.debug('hostID %s', hostid)
-        if not hostid:
+        reply = self.zbx_api.host.get(filter={'name': hostname}, output='shorten')
+        if not reply:
             raise ZbxException("hostname: {} not found".format(hostname))
+        hostid = reply[0]['hostid']
+        log.debug('hostID %s', hostid)
 
         item_in_data = self.zbx_api.item.get(filter={'hostid': hostid, 'key_': item_in}, output=['lastvalue'])
         log.debug('itemID %s', hostid)
@@ -76,7 +78,7 @@ class ZabbixAgent(object):
             raise ZbxException('map: {} not found'.format(map_name))
 
         if len(map_data) > 1:
-            raise ZbxException('return mapss expected one map')
+            raise ZbxException('return maps expected one map')
         return map_data[0]
 
     def scan_map_all(self):

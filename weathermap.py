@@ -46,7 +46,7 @@ class WeathermapCLI(object):
             sys.exit()
 
         if self.args.version:
-            print('Network weathermap 1.1.3')
+            print('Network weathermap 1.1.4')
             sys.exit()
 
         if self.args.map:
