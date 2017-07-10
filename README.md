@@ -109,7 +109,8 @@ Default path:
     -p PWD, --pwd PWD                         Password
     
     # Examples:
-    # When map config exist. If you change map remove host or change position host, configuration will be updated in accordance with changes on the map.
+    # When map config exist. If you change map remove host or change position host, 
+    # configuration will be updated in accordance with changes on the map.
     weathermap.py -s mapname1 mapnameN -f
     
     # First time scan map, config file not exist. Create file with map configuration.
