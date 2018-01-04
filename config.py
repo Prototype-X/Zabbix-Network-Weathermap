@@ -238,10 +238,17 @@ class ConfigCreate(object):
 
         for node in self.map_data['selements']:
             nodeid = node['selementid']
+
             if int(node['elementtype']) == 4:
                 nodename = self.dict_call[int(node['elementtype'])](node['iconid_off'])
-            else:
-                nodename = self.dict_call[int(node['elementtype'])](node['elementid'])
+            elif int(node['elementtype']) == 3:
+                nodename = self.dict_call[int(node['elementtype'])](node['elements'][0]['groupid'])
+            elif int(node['elementtype']) == 2:
+                nodename = self.dict_call[int(node['elementtype'])](node['elements'][0]['triggerid'])
+            elif int(node['elementtype']) == 1:
+                nodename = self.dict_call[int(node['elementtype'])](node['elements'][0]['sysmapid'])
+            elif int(node['elementtype']) == 0:
+                nodename = self.dict_call[int(node['elementtype'])](node['elements'][0]['hostid'])
 
             elemid_dict[node['selementid']] = nodename
 

@@ -70,7 +70,7 @@ class ZabbixAgent(object):
 
     def scan_map(self, map_name):
         map_data = self.zbx_api.map.get(filter={'name': map_name},
-                                        selectSelements=['elementid', 'selementid', 'elementtype', 'iconid_off',
+                                        selectSelements=['elements', 'selementid', 'elementtype', 'iconid_off',
                                                          'x', 'y'],
                                         selectLinks=['selementid1', 'selementid2', 'linkid']
                                         )
