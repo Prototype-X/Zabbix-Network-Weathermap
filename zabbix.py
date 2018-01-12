@@ -47,12 +47,26 @@ class ZabbixAgent(object):
         hostid = reply[0]['hostid']
         log.debug('hostID %s', hostid)
 
-        item_in_data = self.zbx_api.item.get(filter={'hostid': hostid, 'key_': item_in}, output=['lastvalue'])
+        if '+' in item_in:
+            item_in_split = list(map(str.strip, item_in.split('+')))
+            item_in_data = self.zbx_api.item.get(filter={'hostid': hostid, 'key_': item_in_split[0]}, output=['lastvalue'])
+            for item_in_elem in item_in_split[1:]:
+                item_in_data[0]['lastvalue'] = str(int(item_in_data[0]['lastvalue']) + int(self.zbx_api.item.get(filter={'hostid': hostid, 'key_': item_in_elem}, output=['lastvalue'])[0]['lastvalue']))
+        else:
+            item_in_data = self.zbx_api.item.get(filter={'hostid': hostid, 'key_': item_in}, output=['lastvalue'])
+
         log.debug('itemID %s', hostid)
         if not item_in_data:
             raise ZbxException('item: {} not found'.format(item_in))
 
-        item_out_data = self.zbx_api.item.get(filter={'hostid': hostid, 'key_': item_out}, output=['lastvalue'])
+        if '+' in item_out:
+            item_out_split = list(map(str.strip, item_out.split('+')))
+            item_out_data = self.zbx_api.item.get(filter={'hostid': hostid, 'key_': item_out_split[0]}, output=['lastvalue'])
+            for item_out_elem in item_out_split[1:]:
+                item_out_data[0]['lastvalue'] = str(int(item_out_data[0]['lastvalue']) + int(self.zbx_api.item.get(filter={'hostid': hostid, 'key_': item_out_elem}, output=['lastvalue'])[0]['lastvalue']))
+        else:
+            item_out_data = self.zbx_api.item.get(filter={'hostid': hostid, 'key_': item_out}, output=['lastvalue'])
+
         log.debug('itemID %s', hostid)
         if not item_in_data:
             raise ZbxException('item: {} not found'.format(item_out))
