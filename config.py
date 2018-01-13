@@ -108,7 +108,7 @@ class ConfigLoader(object):
                     self.cfg_dict[cfg_sect][cfg_opt]
                 except KeyError:
                     # if cfg_sect == 'map' and cfg_opt == 'bgcolor':
-                        # self.cfg_dict[cfg_sect][cfg_opt] = str()
+                    # self.cfg_dict[cfg_sect][cfg_opt] = str()
                     if cfg_sect == 'link-' or cfg_sect == 'node-':
                         continue
                     raise ConfigException('The option: {0} is missing in section: [{1}]'.format(cfg_sect, cfg_opt))
@@ -205,6 +205,7 @@ class ConfigCreate(object):
     @staticmethod
     def setup_yaml():
         """ StackOverflow Driven Development
+        https://stackoverflow.com/a/31609484/4709370
         http://stackoverflow.com/a/8661021 """
 
         def represent_dict_order(yaml_self, data):
@@ -251,10 +252,10 @@ class ConfigCreate(object):
             im = Image.open(BytesIO(base64.b64decode(image_b64code)))
             width, height = im.size
             self.map_config['node-' + nodeid] = {
-                                                 'name': nodename,
-                                                 'x': int(node['x']) + int(width // 2),
-                                                 'y': int(node['y']) + int(height // 2)
-                                                }
+                'name': nodename,
+                'x': int(node['x']) + int(width // 2),
+                'y': int(node['y']) + int(height // 2)
+            }
 
         for link in self.map_data['links']:
             self.map_config['link-' + link['linkid']] = {'node1': 'node-' + link['selementid2'],
