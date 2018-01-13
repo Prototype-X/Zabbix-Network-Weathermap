@@ -16,7 +16,7 @@ Network weathermap for Zabbix like [Network Weathermap](http://network-weatherma
 * Support for map elements with the type: host, map, image
 
 ### Requrements ###
-* Zabbix 3.0 - 3.2 (Zabbix 3.4 not yet supported)
+* Zabbix 3.4 (I dont check backward compability with Zabbix 3.0 - 3.2)
 * Python 3.4.3 and above
 * libs: Pillow, py-zabbix, ruamel.yaml
 
