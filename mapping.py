@@ -374,5 +374,5 @@ class Map(object):
         @param path: path to the file
         """
         self.image.save(path, "PNG")
-        log.debug('save img s%', path)
+        log.debug('save img {}'.format(path))
         self.image.close()
