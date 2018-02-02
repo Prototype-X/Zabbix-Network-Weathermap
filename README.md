@@ -215,6 +215,8 @@ Option copy type bool, copy link and nodes in new config, when link and nodes no
 
 ### Notice ###
 
+Zabbix 3.4.x do not refresh background image on map. [FIX!](https://github.com/Prototype-X/Zabbix-Network-Weathermap/issues/26#issuecomment-362691241)
+
 Zabbix API performance is low. Zabbix agent run weathermap.py. Weathermap.py can be terminated by timeout, set in
 zabbix_agentd.conf.
 
