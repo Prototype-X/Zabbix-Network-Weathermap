@@ -185,37 +185,47 @@ class Link(object):
         return int(math.sin(math.atan2(y, x) + math.atan2(b, a))*math.sqrt(x*x+y*y))
 
     def data(self, in_bps=0000, out_bps=749890567):
-        in_mps = in_bps/1000000
-        out_mps = out_bps/1000000
-        self._fill_arrow(in_mps, out_mps)
-        in_name, out_name = self._name(in_mps, out_mps)
+        in_kps = in_bps/1000
+        out_kps = out_bps/1000
+        self._fill_arrow(in_kps, out_kps)
+        in_name, out_name = self._name(in_kps, out_kps)
         in_point = self._get_input_label_point()
         out_point = self._get_output_label_point()
         self.in_label = Label(self.fontfile, label=in_name, point=in_point, fontsize=self.fontsize)
         self.out_label = Label(self.fontfile, label=out_name, point=out_point, fontsize=self.fontsize)
 
     @staticmethod
-    def _name(in_mps, out_mps):
-        if in_mps <= 999:
-            in_label = str(round(in_mps, 2)) + 'M'
-        else:
-            in_ps = in_mps/1000
-            in_label = str(round(in_ps, 2)) + 'G'
+    def _name(in_kps, out_kps):
+        if in_kps <= 999:
+            in_label = str(round(in_kps, 2)) + 'K'
 
-        if out_mps <= 999:
-            out_label = str(round(out_mps, 2)) + 'M'
+        elif 999 < in_kps <= 999999:
+            in_mps = in_kps/1000
+            in_label = str(round(in_mps, 2)) + 'M'
+
         else:
-            out_ps = out_mps/1000
-            out_label = str(round(out_ps, 2)) + 'G'
+            in_gps = in_kps/1000
+            in_label = str(round(in_gps, 2)) + 'G'
+
+        if out_kps <= 999:
+            out_label = str(round(out_kps, 2)) + 'K'
+
+        elif 999 < out_kps <= 999999:
+            out_mps = out_kps/1000
+            out_label = str(round(out_mps, 2)) + 'M'
+
+        else:
+            out_gps = out_kps/1000
+            out_label = str(round(out_gps, 2)) + 'G'
 
         return in_label, out_label
 
-    def _fill_arrow(self, in_mps, out_mps):
+    def _fill_arrow(self, in_kps, out_kps):
         switch = ((0, 0, 1), (1, 1, 2), (2, 2, 10), (3, 10, 25), (4, 25, 40), (5, 40, 55), (6, 55, 70), (7, 70, 85),
                   (8, 85, 100), (8, 100, 100000))
 
-        in_percent = math.ceil(in_mps * 100 / self.bandwidth)
-        out_percent = math.ceil(out_mps * 100 / self.bandwidth)
+        in_percent = math.ceil(in_kps * 100 / self.bandwidth)
+        out_percent = math.ceil(out_kps * 100 / self.bandwidth)
         for sw in switch:
             if in_percent in range(sw[1], sw[2]):
                 self.incolor = self.palette[sw[0]]
