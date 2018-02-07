@@ -224,8 +224,8 @@ class Link(object):
         switch = ((0, 0, 1), (1, 1, 2), (2, 2, 10), (3, 10, 25), (4, 25, 40), (5, 40, 55), (6, 55, 70), (7, 70, 85),
                   (8, 85, 100), (8, 100, 100000))
 
-        in_percent = math.ceil(in_kps / self.bandwidth * 10)
-        out_percent = math.ceil(out_kps / self.bandwidth * 10)
+        in_percent = math.ceil(in_kps / (self.bandwidth * 10))
+        out_percent = math.ceil(out_kps / (self.bandwidth * 10))
         for sw in switch:
             if in_percent in range(sw[1], sw[2]):
                 self.incolor = self.palette[sw[0]]
