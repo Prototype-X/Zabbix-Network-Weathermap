@@ -204,7 +204,7 @@ class Link(object):
             in_label = str(round(in_mps, 2)) + 'M'
 
         else:
-            in_gps = in_kps/1000
+            in_gps = in_kps/1000000
             in_label = str(round(in_gps, 2)) + 'G'
 
         if out_kps <= 999:
@@ -215,7 +215,7 @@ class Link(object):
             out_label = str(round(out_mps, 2)) + 'M'
 
         else:
-            out_gps = out_kps/1000
+            out_gps = out_kps/1000000
             out_label = str(round(out_gps, 2)) + 'G'
 
         return in_label, out_label
