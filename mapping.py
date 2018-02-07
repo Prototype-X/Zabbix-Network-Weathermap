@@ -196,27 +196,33 @@ class Link(object):
 
     @staticmethod
     def _name(in_kps, out_kps):
-        if in_kps <= 999:
+        if 0 <= in_kps <= 999:
             in_label = str(round(in_kps, 2)) + 'K'
 
         elif 999 < in_kps <= 999999:
             in_mps = in_kps/1000
             in_label = str(round(in_mps, 2)) + 'M'
 
-        else:
+        elif in_kps > 999999:
             in_gps = in_kps/1000000
             in_label = str(round(in_gps, 2)) + 'G'
 
-        if out_kps <= 999:
+        else:
+            in_label = 'ERR'
+
+        if 0 <= out_kps <= 999:
             out_label = str(round(out_kps, 2)) + 'K'
 
         elif 999 < out_kps <= 999999:
             out_mps = out_kps/1000
             out_label = str(round(out_mps, 2)) + 'M'
 
-        else:
+        elif out_kps > 999999:
             out_gps = out_kps/1000000
             out_label = str(round(out_gps, 2)) + 'G'
+
+        else:
+            out_label = 'ERR'
 
         return in_label, out_label
 
