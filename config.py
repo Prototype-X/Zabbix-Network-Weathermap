@@ -28,15 +28,15 @@ class ConfigTemplate(metaclass=Singleton):  # noqa
     """ This is config template. DO NOT MODIFY THIS OBJECT."""
 
     def __init__(self):
-        self.template = {'zabbix': {'url': str(), 'login': str(), 'password': str()},
+        self.template = {'zabbix': {'url': str(), 'login': str(), 'password': str(), 'version': str()},
                          'map': {'name': str(), 'bgcolor': str(), 'fontsize': 10, 'width': int(), 'height': int()},
                          'table': {'show': False, 'x': int(), 'y': int()},
-                         'link': {'width': 10, 'bandwidth': 100},
+                         'link': {'width': 10, 'bandwidth': {'in': 100, 'out': 100}},
                          'palette': Palette().palette,
                          'node-': {'name': str(), 'label': str(), 'icon': str(), 'x': int(), 'y': int()},
                          'link-': {'node1': str(), 'node2': str(), 'name1': str(), 'name2': str(), 'copy': 0,
                                    'hostname': str(), 'itemin': str(), 'itemout': str(), 'width': int(),
-                                   'bandwidth': int()}
+                                   'bandwidth': {'in': int(), 'out': int()}}
                          }
         log.debug('Object singleton ConfigTemplate created')
 
@@ -221,7 +221,8 @@ class ConfigCreate(object):
         elemid_dict = {}
         self.map_config['zabbix'] = {'url': self.zbx.url,
                                      'login': self.zbx.login,
-                                     'password': self.zbx.password
+                                     'password': self.zbx.password,
+                                     'version': self.zbx.api_ver()
                                      }
         self.map_config['map'] = {'name': self.map_data['name'],
                                   'bgcolor': self.template['map']['bgcolor'],
