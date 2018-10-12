@@ -57,7 +57,8 @@ Network weathermap for Zabbix like [Network Weathermap](http://network-weatherma
     
 * Open file /opt/Zabbix-Network-Weathermap/mapcfgs/mapname1.yaml and set hostname and itemin, itemout. If you set visible name, then use visible name instead hostname.
 
-          link-1:
+ ```yaml
+            link-1:
             node1: node-Router
             node2: node-Switch
             name1: R1
@@ -67,6 +68,7 @@ Network weathermap for Zabbix like [Network Weathermap](http://network-weatherma
             #itemin/itemout = item key
             itemin: ifHCInOctets[ge-0/0/0]
             itemout: ifHCOutOctets[ge-0/0/0]
+ ```
 
 * Create map image and upload it to Zabbix:
     
