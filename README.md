@@ -58,7 +58,7 @@ Network weathermap for Zabbix like [Network Weathermap](http://network-weatherma
 * Open file /opt/Zabbix-Network-Weathermap/mapcfgs/mapname1.yaml and set hostname and itemin, itemout. If you set visible name, then use visible name instead hostname.
 
  ```yaml
-            link-1:
+          link-1:
             node1: node-Router
             node2: node-Switch
             name1: R1
@@ -129,7 +129,7 @@ Default path:
 For auto update image or rescan map you can use cron, systemd or Template Weathermap.
 
 ### Map config ###
-        
+```yaml        
     %YAML 1.2
     ---
     map:
@@ -202,9 +202,9 @@ For auto update image or rescan map you can use cron, systemd or Template Weathe
       itemin: ifHCInOctets[ge-0/0/1]
       itemout: ifHCOutOctets[ge-0/0/1]
     ...
-
+```
 Option copy type bool, copy link and nodes in new config, when link and nodes not exist in zabbix map
-
+```yaml
     link-lyonlz7x:
       node1: node-nridx7c0
       node2: node-uwf443jw
@@ -214,7 +214,7 @@ Option copy type bool, copy link and nodes in new config, when link and nodes no
       hostname: R10
       itemin: ifHCOutOctets[1/6]
       itemout: ifHCInOctets[1/6]
-
+```
 ### Notice ###
 
 Zabbix 3.4.x do not refresh background image on map. [FIX!](https://github.com/Prototype-X/Zabbix-Network-Weathermap/issues/26#issuecomment-362691241)
