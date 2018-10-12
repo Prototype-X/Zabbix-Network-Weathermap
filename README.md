@@ -21,7 +21,7 @@ Network weathermap for Zabbix like [Network Weathermap](http://network-weatherma
 * libs: Pillow, py-zabbix, ruamel.yaml
 
 ### Install ###
-
+```bash
     sudo apt-get install python3-pip python-pip python3-pil
     sudo pip3 install py-zabbix
     sudo pip3 install ruamel.yaml==0.14.12
@@ -30,7 +30,7 @@ Network weathermap for Zabbix like [Network Weathermap](http://network-weatherma
     chmod a+x /opt/Zabbix-Network-Weathermap/starter.py
     chmod a+x /opt/Zabbix-Network-Weathermap/weathermap.py
     cp /opt/Zabbix-Network-Weathermap/template/userparameter_weathermap.conf /etc/zabbix/zabbix_agentd.d/
-
+```
 * Copy /template/userparemeter_weathermap.conf to /etc/zabbix/zabbix_agentd.d/ and reload zabbix-agent
 * Import template /template/weathermap.xml to zabbix
 * Add Template Weathermap to host where use zabbix agent (for example use host zabbix server)
